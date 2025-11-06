@@ -618,8 +618,15 @@ document.addEventListener('DOMContentLoaded', () => {
             obj.visible = false;
             if (secondSmoothed) {
                 secondSmoothed.add(obj);      // attach to second smoothed group
+                console.log(`[Target 2] Registered model for slot ${slot}, added to secondSmoothed. Children count: ${secondSmoothed.children.length}`);
+            } else {
+                console.error(`[Target 2] ERROR: secondSmoothed does not exist when trying to register slot ${slot}!`);
+                // Try to add directly to scene as fallback
+                scene.add(obj);
+                console.warn(`[Target 2] Added model directly to scene as fallback`);
             }
             secondModels[slot] = obj;
+            console.log(`[Target 2] Model registered for slot ${slot}, total models: ${secondModels.filter(Boolean).length}`);
             secondApplyVisibility();
         }
 
@@ -1023,24 +1030,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
             files.forEach((path, i) => {
                 console.log(`[Second Target] Loading composite part ${i}: ${path}`);
-                loader.load(path, (gltf) => {
-                    console.log(`[Second Target] Loaded part ${i}: ${path}`);
-                    const root = gltf.scene;
-                    root.visible = false;
-                    root.position.set(0,0,0);
-                    root.rotation.set(0,0,0);
-                    root.userData = root.userData || {};
-                    root.userData.clips = Array.isArray(gltf.animations) ? gltf.animations : [];
-                    prepContent(root);
-                    group.add(root);
-                    parts[i] = root;
+                loader.load(
+                    path, 
+                    (gltf) => {
+                        console.log(`[Second Target] Loaded part ${i}: ${path}`);
+                        const root = gltf.scene;
+                        root.visible = false;
+                        root.position.set(0,0,0);
+                        root.rotation.set(0,0,0);
+                        root.userData = root.userData || {};
+                        root.userData.clips = Array.isArray(gltf.animations) ? gltf.animations : [];
+                        prepContent(root);
+                        group.add(root);
+                        parts[i] = root;
 
-                    allLoaded++;
-                    console.log(`[Second Target] Part ${i} loaded. Total loaded: ${allLoaded}/${files.length}`);
-                    if (secondModels[slot] === group && secondIndex === slot && secondTargetFound) {
-                        secondSlotControllers[slot].startSequenceIfReady();
+                        allLoaded++;
+                        console.log(`[Second Target] Part ${i} loaded. Total loaded: ${allLoaded}/${files.length}`);
+                        
+                        // If target is already found and this is the current slot, try to start sequence
+                        if (secondModels[slot] === group && secondIndex === slot && secondTargetFound) {
+                            console.log(`[Second Target] Target already found, checking if sequence can start...`);
+                            secondSlotControllers[slot].startSequenceIfReady();
+                        }
+                        
+                        // If all parts are loaded and target is found, ensure sequence starts
+                        if (allLoaded >= files.length && secondTargetFound && secondIndex === slot) {
+                            console.log(`[Second Target] All parts loaded and target found - ensuring sequence starts`);
+                            if (secondSlotControllers[slot] && !secondSlotControllers[slot].started) {
+                                secondSlotControllers[slot].startSequenceIfReady();
+                            }
+                        }
+                    },
+                    undefined,
+                    (error) => {
+                        console.error(`[Second Target] Failed to load part ${i}: ${path}`, error);
+                        // Continue even if one part fails - mark as "loaded" to prevent blocking
+                        allLoaded++;
+                        // If this was the last part and target is found, still try to start sequence
+                        if (allLoaded >= files.length && secondTargetFound && secondIndex === slot) {
+                            console.log(`[Second Target] All parts processed (some may have failed) - checking sequence`);
+                            if (secondSlotControllers[slot] && !secondSlotControllers[slot].started) {
+                                secondSlotControllers[slot].startSequenceIfReady();
+                            }
+                        }
                     }
-                });
+                );
             });
         }
 
@@ -1352,7 +1386,16 @@ document.addEventListener('DOMContentLoaded', () => {
             models.forEach(m => { if (m) m.visible = false; });
             
             // Show only current second target scene
-            secondModels.forEach((m, i) => { if (m) m.visible = (i === secondIndex); });
+            secondModels.forEach((m, i) => { 
+                if (m) {
+                    m.visible = (i === secondIndex);
+                    console.log(`[Target 2] Setting model ${i} visibility to ${m.visible} (current index: ${secondIndex})`);
+                    // Ensure the group itself is visible if it should be shown
+                    if (i === secondIndex && m.visible) {
+                        console.log(`[Target 2] Model ${i} is visible, checking children count:`, m.children.length);
+                    }
+                }
+            });
             
             // fire leave/enter once per slot change
             if (secondLastActive !== secondIndex) {
@@ -1360,7 +1403,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     secondSlotControllers[secondLastActive].onLeave();
                 }
                 if (secondSlotControllers[secondIndex]?.onEnter) {
+                    console.log(`[Target 2] Calling onEnter for slot ${secondIndex}`);
                     secondSlotControllers[secondIndex].onEnter();
+                } else {
+                    console.warn(`[Target 2] No controller found for slot ${secondIndex}`);
                 }
                 
                 secondLastActive = secondIndex;
@@ -1438,7 +1484,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Create second smoothed group for second target (at scene level)
             secondSmoothed = new THREE.Group();
+            secondSmoothed.name = 'second-smoothed-group';
+            secondSmoothed.visible = true; // Ensure it's visible
             scene.add(secondSmoothed); // Add to scene for independent interpolation
+            console.log('[Target 2] Created secondSmoothed group and added to scene');
+            console.log('[Target 2] secondSmoothed in scene:', scene.children.includes(secondSmoothed));
             
             // Load occluders for second target
             loadSecondTargetOccluders();
@@ -1462,6 +1512,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 console.log('🎯 Second target found! Showing scenes...');
                 console.log('[Debug] Activating Target 2, current scene:', secondIndex);
+                console.log('[Debug] Second target model exists:', !!secondModels[secondIndex]);
+                console.log('[Debug] Second target controller exists:', !!secondSlotControllers[secondIndex]);
                 
                 // Hide all other targets' models
                 models.forEach(m => { if (m) m.visible = false; });
@@ -1485,12 +1537,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 secondUpdateLabel();
                 secondUpdateNavigationButtons();
                 
-                // Trigger composite sequence if on composite slot
-                if (secondSlotControllers[secondIndex] && secondSlotControllers[secondIndex].isComposite && !secondSlotControllers[secondIndex].started) {
-                    secondSlotControllers[secondIndex].startSequenceIfReady();
-                }
-                
+                // Show content first (this will call secondApplyVisibility)
                 showSecondTargetContent();
+                
+                // Trigger composite sequence if on composite slot
+                // Use a small delay to ensure models have a chance to load if they're still loading
+                if (secondSlotControllers[secondIndex] && secondSlotControllers[secondIndex].isComposite) {
+                    console.log(`[Target 2] Attempting to start composite sequence for slot ${secondIndex}`);
+                    // Try immediately
+                    secondSlotControllers[secondIndex].startSequenceIfReady();
+                    
+                    // Also set up a retry mechanism in case models are still loading
+                    // This handles the case where target is found before all models are loaded
+                    let retryCount = 0;
+                    const maxRetries = 10;
+                    const retryInterval = setInterval(() => {
+                        retryCount++;
+                        if (secondSlotControllers[secondIndex] && !secondSlotControllers[secondIndex].started) {
+                            console.log(`[Target 2] Retry ${retryCount}: Attempting to start sequence...`);
+                            secondSlotControllers[secondIndex].startSequenceIfReady();
+                            
+                            // If sequence started or we've tried enough times, stop retrying
+                            if (secondSlotControllers[secondIndex].started || retryCount >= maxRetries) {
+                                clearInterval(retryInterval);
+                                if (secondSlotControllers[secondIndex].started) {
+                                    console.log(`[Target 2] Sequence started successfully after ${retryCount} retries`);
+                                } else {
+                                    console.warn(`[Target 2] Sequence failed to start after ${maxRetries} retries`);
+                                }
+                            }
+                        } else {
+                            clearInterval(retryInterval);
+                        }
+                    }, 500); // Check every 500ms
+                } else {
+                    console.log(`[Target 2] Slot ${secondIndex} is not a composite slot or controller doesn't exist`);
+                }
             };
             
             secondAnchor.onTargetLost = () => {
