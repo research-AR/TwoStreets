@@ -143,9 +143,9 @@
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":9,
+			"count":7,
 			"max":[
-				0.3333333333333333
+				0.25
 			],
 			"min":[
 				0
@@ -155,7 +155,7 @@
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":9,
+			"count":7,
 			"type":"VEC3"
 		}
 	],
@@ -192,18 +192,18 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":36,
+			"byteLength":28,
 			"byteOffset":1032
 		},
 		{
 			"buffer":0,
-			"byteLength":108,
-			"byteOffset":1068
+			"byteLength":84,
+			"byteOffset":1060
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":1176,
+			"byteLength":1144,
 			"uri":"BarV2-10.bin"
 		}
 	]

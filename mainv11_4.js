@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let shouldShowSecondTargetArrow = false;
         let secondTargetPromptDelayTimer = null;
         let awaitingSecondTarget = false;
+        let firstTargetCurrentlyTracked = false;
 
         const loader = new GLTFLoader();
 
@@ -392,6 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Show HUD only while target is tracked
         anchor.onTargetFound = () => { 
+            firstTargetCurrentlyTracked = true;
             // CRITICAL: Only activate Target 1 if no other target is active
             if (secondTargetActive) {
                 console.log('⚠️ Target 1 found but Target 2 is active - ignoring to prevent interference');
@@ -443,6 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
         anchor.onTargetLost = () => { 
             console.log('Target 1 lost.');
             targetFound = false;
+            firstTargetCurrentlyTracked = false;
             // Only hide HUD if no other target is active
             if (!secondTargetActive) {
                 hud.hidden = true;
@@ -1396,9 +1399,9 @@ document.addEventListener('DOMContentLoaded', () => {
             4000, 4000, 4250, 4500, 4750, 5000, 5250, 5500, 5750, 6000,
             7000,7000, //kullanılan enerji
             7000, 7250, 7500, 7750, 8000, 8250, 8500, 8750, 9000, 9250,//mevcutpencere
-            10000, 10500, 14500, 14834,
+            10000, 10250, 12250, 12500,
             10500, 14000, 14000,
-            15000, 15000, 15250, 15500, 15750, 16000,
+            13000, 13000, 13250, 13500, 13750, 14000,
         ], 
         
         // HideAfter array - how long each part stays (0 = forever)
@@ -1514,11 +1517,11 @@ document.addEventListener('DOMContentLoaded', () => {
             2000,   
             4000, 4500, 5000, 5500, 6000, 
             0, 0, 0, 0, 0, 
-            500, 500, 500, 500, 0,
-            6500, 6500,
+            250, 250, 250, 250, 0,
+            3500, 3500,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             5000, 4750, 4245, 3250, 2177, 1000,
-            3500,
+            4500,
             250, 250, 250, 250, 250, 250, 250, 250, 0, 0,
 
             ], {
@@ -1658,6 +1661,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Set up event handlers for second target
         function setupSecondTargetHandlers() {
             secondAnchor.onTargetFound = () => {
+                if (firstTargetCurrentlyTracked) {
+                    console.log('Second target detected while first target is still in view. Ignoring to avoid overlap.');
+                    return;
+                }
                 // Only activate if first target scenes are completed
                 if (!allScenesCompleted) {
                     console.log('Second target found but first target scenes not completed yet.');
@@ -1771,7 +1778,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Second Target Scene 1 - Composite scene
             secondLoadComposite(0, [
                 // scene2
-                "./assets/DataModel11_3/Franz/Bar/Barsabit.gltf",
+
                 "./assets/DataModel11_3/Franz/Bar/Barkapanacak.gltf",
                 "./assets/DataModel11_3/Franz/Sahne1/gunes.gltf", 
                 "./assets/DataModel11_3/Franz/Sahne2/binakapanacak1.gltf",                
@@ -1784,13 +1791,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 "./assets/DataModel11_3/Franz/Sahne1/yazi2.gltf", 
                 "./assets/DataModel11_3/Franz/Sahne1/yazi3.gltf", 
                 "./assets/DataModel11_3/Franz/Sahne2/yazi2.gltf", 
-                "./assets/DataModel11_3/Franz/Sahne2/simsek.gltf",                  
+                "./assets/DataModel11_3/Franz/Sahne2/simsek2.gltf",                  
                 "./assets/DataModel11_3/Franz/Sahne2/binaacilacak1.gltf",                
                 "./assets/DataModel11_3/Franz/Sahne2/binaacilacak2.gltf",                
                 "./assets/DataModel11_3/Franz/Sahne2/binaacilacak3.gltf",                
                 "./assets/DataModel11_3/Franz/Sahne2/binaacilacak4.gltf",                
                 "./assets/DataModel11_3/Franz/Sahne2/binaacilacak5.gltf",       
-                "./assets/DataModel11_3/Franz/Sahne2/arkaplan.gltf", 
+                "./assets/DataModel11_3/Franz/Sahne2/arkaplan.gltf",
+                "./assets/DataModel11_3/Franz/Sahne2/simsek2ghost.gltf", 
+                "./assets/DataModel11_3/Franz/Sahne2/simsek3.gltf", 
                 "./assets/DataModel11_3/Franz/Sahne2/isik4.gltf",
                 "./assets/DataModel11_3/Franz/Sahne2/isik1.gltf",                         
                 "./assets/DataModel11_3/Franz/Sahne2/isik2.gltf",                         
@@ -1800,23 +1809,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 "./assets/DataModel11_3/Franz/Sahne1/yazi2.gltf", 
                 "./assets/DataModel11_3/Franz/Sahne1/yazi3.gltf", 
                 "./assets/DataModel11_3/Franz/Sahne3/yazi2.gltf",
+                "./assets/DataModel11_3/Franz/Bar/Barsabit.gltf",
                 "./assets/DataModel11_3/Franz/Bar/Bar2.gltf",  
                 "./assets/DataModel11_3/Franz/Bar/ok.gltf",  
                 "./assets/DataModel11_3/Franz/Bar/Bar3.gltf",  
-                "./assets/DataModel11_3/Franz/Bar/simsek.gltf",  
+                "./assets/DataModel11_3/Franz/Bar/simsek.gltf", 
+                "./assets/DataModel11_3/Franz/Bar/simsekghost.gltf", 
                 "./assets/DataModel11_3/Franz/Sahne3/isik1.gltf",
                 "./assets/DataModel11_3/Franz/Sahne3/isik2.gltf",
                 "./assets/DataModel11_3/Franz/Sahne3/isik3.gltf",
                 "./assets/DataModel11_3/Franz/Sahne3/arkaplan.gltf",
                 "./assets/DataModel11_3/Franz/Sahne3/yazicevap.gltf",
             ], 
-            [0, 0, 0, 0, 0, 0, 0, 0,
-            1000, 1250, 1500, 1750, 2500,3000, 3250, 3500, 3750, 4000, 4750, 5000, 5250, 5500, 5750,  
-            8000, 8250, 8500, 8750, 10000, 10000, 11883, 10000, 14250, 14500, 14750, 14000, 14750,
+            [ 0, 0, 0, 0, 0, 0, 0,
+            1000, 1250, 1500, 1750, 2500, 2500, 2750, 3000, 3250, 3500, 4000, 4250, 4250, 4250, 4500, 4750, 5000,  
+            8000, 8250, 8500, 8750, 10000, 10000, 10000, 11883, 10000, 13000, 13000, 13250, 13500, 12750, 13500,
             ],     // Timing
-            [0, 9000, 0, 3000, 3250, 3500, 3750, 4000,
-            6000, 5750, 5500, 5250, 7500, 0,  0, 0, 0, 0, 3250, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            [10000, 0, 3000, 3250, 3500, 3750, 4000,
+            6000, 5750, 5500, 5250, 1750, 0, 0, 0, 0, 0, 3250, 2750, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             ]);   
         }
         

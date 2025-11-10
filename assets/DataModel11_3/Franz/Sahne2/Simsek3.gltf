@@ -15,38 +15,32 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Cube.019",
-			"rotation":[
-				0,
-				0,
-				-0.7071068286895752,
-				0.7071068286895752
-			],
+			"name":"Simsek3.003",
 			"scale":[
-				1.6666550636291504,
-				3.8044300079345703,
-				1.3333332538604736
+				1.409999966621399,
+				1.409999966621399,
+				1.409999966621399
 			],
 			"translation":[
-				0.10218048095703125,
-				0.9979784488677979,
-				-0.03223533183336258
+				0.2698119878768921,
+				0.25987309217453003,
+				-0.011949092149734497
 			]
 		},
 		{
 			"children":[
 				0
 			],
-			"name":"Bar9.001",
+			"name":"Simsek3.009",
 			"scale":[
-				0.0009999871253967285,
-				1,
-				1
+				1.7200000286102295,
+				1.7200000286102295,
+				1.7200000286102295
 			],
 			"translation":[
-				-0.10218881815671921,
-				-0.9979784488677979,
-				0.03223533183336258
+				-0.38043487071990967,
+				-0.3917785882949829,
+				0.016848217695951462
 			]
 		}
 	],
@@ -61,12 +55,12 @@
 					}
 				}
 			],
-			"name":"Bar9.001Action.001",
+			"name":"Empty.003Action.002",
 			"samplers":[
 				{
-					"input":3,
+					"input":4,
 					"interpolation":"LINEAR",
-					"output":4
+					"output":5
 				}
 			]
 		}
@@ -74,7 +68,7 @@
 	"materials":[
 		{
 			"doubleSided":true,
-			"name":"PencereSolar.007",
+			"name":"PencereSolar.009",
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
 					0.9822452664375305,
@@ -89,14 +83,15 @@
 	],
 	"meshes":[
 		{
-			"name":"Cube.066",
+			"name":"Plane.020",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":0,
-						"NORMAL":1
+						"NORMAL":1,
+						"TEXCOORD_0":2
 					},
-					"indices":2,
+					"indices":3,
 					"material":0
 				}
 			]
@@ -106,37 +101,43 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":24,
+			"count":54,
 			"max":[
-				0.6055412888526917,
-				0.09313690662384033,
-				0.027926506474614143
+				-0.1826060712337494,
+				-0.18430715799331665,
+				0.016083145514130592
 			],
 			"min":[
-				0.5920411944389343,
-				-0.026860499754548073,
-				0.02042650617659092
+				-0.20467132329940796,
+				-0.22406262159347534,
+				0.008474445901811123
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":24,
+			"count":54,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
-			"componentType":5123,
-			"count":36,
-			"type":"SCALAR"
+			"componentType":5126,
+			"count":54,
+			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
+			"componentType":5123,
+			"count":96,
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":4,
 			"componentType":5126,
-			"count":49,
+			"count":25,
 			"max":[
-				2
+				1
 			],
 			"min":[
 				0
@@ -144,46 +145,52 @@
 			"type":"SCALAR"
 		},
 		{
-			"bufferView":4,
+			"bufferView":5,
 			"componentType":5126,
-			"count":49,
+			"count":25,
 			"type":"VEC3"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":288,
+			"byteLength":648,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":288,
-			"byteOffset":288,
+			"byteLength":648,
+			"byteOffset":648,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":72,
-			"byteOffset":576,
+			"byteLength":432,
+			"byteOffset":1296,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":192,
+			"byteOffset":1728,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":196,
-			"byteOffset":648
+			"byteLength":100,
+			"byteOffset":1920
 		},
 		{
 			"buffer":0,
-			"byteLength":588,
-			"byteOffset":844
+			"byteLength":300,
+			"byteOffset":2020
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":1432,
-			"uri":"BarV2-9.bin"
+			"byteLength":2320,
+			"uri":"Simsek3.bin"
 		}
 	]
 }

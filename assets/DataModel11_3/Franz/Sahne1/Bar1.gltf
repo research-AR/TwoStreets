@@ -8,31 +8,79 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				0
+				0,
+				1,
+				2,
+				3
 			]
 		}
 	],
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Bar1.003",
+			"name":"Cube.063",
 			"rotation":[
-				-0.5000001788139343,
 				0,
-				-0.8660253286361694,
-				3.6019952176502557e-07
+				-0.8660253882408142,
+				0,
+				0.4999999701976776
+			],
+			"scale":[
+				1.6666682958602905,
+				1,
+				1.3333332538604736
+			]
+		},
+		{
+			"mesh":1,
+			"name":"Cube.076",
+			"rotation":[
+				-0.4999999701976776,
+				0,
+				-0.8660253882408142,
+				2.165628387729157e-07
 			],
 			"scale":[
 				1,
-				4.802999973297119,
+				3.8791191577911377,
 				1
+			]
+		},
+		{
+			"mesh":2,
+			"name":"Cube.081",
+			"rotation":[
+				0.6123725175857544,
+				-0.6123724579811096,
+				-0.3535534143447876,
+				0.3535534143447876
+			],
+			"scale":[
+				1.6666550636291504,
+				4.020383834838867,
+				1.3333332538604736
+			]
+		},
+		{
+			"mesh":3,
+			"name":"Cube.082",
+			"rotation":[
+				0.6123725175857544,
+				-0.6123724579811096,
+				-0.3535534143447876,
+				0.3535534143447876
+			],
+			"scale":[
+				1.6666550636291504,
+				3.9291837215423584,
+				1.3333332538604736
 			]
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
-			"name":"PencereSolar.008",
+			"name":"PencereSolar.005",
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
 					0.9822452664375305,
@@ -47,12 +95,51 @@
 	],
 	"meshes":[
 		{
-			"name":"Cube.007",
+			"name":"Cube.034",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":0,
 						"NORMAL":1
+					},
+					"indices":2,
+					"material":0
+				}
+			]
+		},
+		{
+			"name":"Cube.045",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":3,
+						"NORMAL":4
+					},
+					"indices":2,
+					"material":0
+				}
+			]
+		},
+		{
+			"name":"Cube.074",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":5,
+						"NORMAL":6
+					},
+					"indices":2,
+					"material":0
+				}
+			]
+		},
+		{
+			"name":"Cube.087",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":7,
+						"NORMAL":8
 					},
 					"indices":2,
 					"material":0
@@ -66,14 +153,14 @@
 			"componentType":5126,
 			"count":24,
 			"max":[
-				0.3155791163444519,
-				0.20969679951667786,
-				-0.4663528800010681
+				-0.14252062141895294,
+				-0.9685326814651489,
+				0.3526861369609833
 			],
 			"min":[
-				0.30307912826538086,
-				0.09132662415504456,
-				-0.47635287046432495
+				-0.15602059662342072,
+				-1.009228229522705,
+				0.34518614411354065
 			],
 			"type":"VEC3"
 		},
@@ -88,6 +175,72 @@
 			"componentType":5123,
 			"count":36,
 			"type":"SCALAR"
+		},
+		{
+			"bufferView":3,
+			"componentType":5126,
+			"count":24,
+			"max":[
+				0.24186372756958008,
+				0.25436902046203613,
+				-0.46024924516677856
+			],
+			"min":[
+				0.21936380863189697,
+				0.13998065888881683,
+				-0.4702492356300354
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":4,
+			"componentType":5126,
+			"count":24,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":5,
+			"componentType":5126,
+			"count":24,
+			"max":[
+				0.3393037021160126,
+				0.08006112277507782,
+				0.3526865541934967
+			],
+			"min":[
+				0.3258035182952881,
+				0.0601593554019928,
+				0.3451865613460541
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":6,
+			"componentType":5126,
+			"count":24,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":7,
+			"componentType":5126,
+			"count":24,
+			"max":[
+				0.6055412292480469,
+				0.061555713415145874,
+				0.3526862561702728
+			],
+			"min":[
+				0.5920411348342896,
+				-0.06045392155647278,
+				0.3451862633228302
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":8,
+			"componentType":5126,
+			"count":24,
+			"type":"VEC3"
 		}
 	],
 	"bufferViews":[
@@ -108,11 +261,47 @@
 			"byteLength":72,
 			"byteOffset":576,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":288,
+			"byteOffset":648,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":288,
+			"byteOffset":936,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":288,
+			"byteOffset":1224,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":288,
+			"byteOffset":1512,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":288,
+			"byteOffset":1800,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":288,
+			"byteOffset":2088,
+			"target":34962
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":648,
+			"byteLength":2376,
 			"uri":"Bar1.bin"
 		}
 	]

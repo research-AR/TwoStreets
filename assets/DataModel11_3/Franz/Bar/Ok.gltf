@@ -45,6 +45,39 @@
 			]
 		}
 	],
+	"animations":[
+		{
+			"channels":[
+				{
+					"sampler":0,
+					"target":{
+						"node":1,
+						"path":"translation"
+					}
+				},
+				{
+					"sampler":1,
+					"target":{
+						"node":1,
+						"path":"rotation"
+					}
+				}
+			],
+			"name":"Ok1.004Action",
+			"samplers":[
+				{
+					"input":4,
+					"interpolation":"LINEAR",
+					"output":5
+				},
+				{
+					"input":4,
+					"interpolation":"LINEAR",
+					"output":6
+				}
+			]
+		}
+	],
 	"materials":[
 		{
 			"doubleSided":true,
@@ -111,6 +144,30 @@
 			"componentType":5123,
 			"count":36,
 			"type":"SCALAR"
+		},
+		{
+			"bufferView":4,
+			"componentType":5126,
+			"count":64,
+			"max":[
+				2.625
+			],
+			"min":[
+				0
+			],
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":5,
+			"componentType":5126,
+			"count":64,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":6,
+			"componentType":5126,
+			"count":64,
+			"type":"VEC4"
 		}
 	],
 	"bufferViews":[
@@ -137,11 +194,26 @@
 			"byteLength":72,
 			"byteOffset":704,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":256,
+			"byteOffset":776
+		},
+		{
+			"buffer":0,
+			"byteLength":768,
+			"byteOffset":1032
+		},
+		{
+			"buffer":0,
+			"byteLength":1024,
+			"byteOffset":1800
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":776,
+			"byteLength":2824,
 			"uri":"Ok.bin"
 		}
 	]

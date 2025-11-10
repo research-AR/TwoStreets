@@ -15,39 +15,29 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Simsek2.3",
-			"scale":[
-				1.840000033378601,
-				1.840000033378601,
-				1.840000033378601
-			]
-		}
-	],
-	"animations":[
-		{
-			"channels":[
-				{
-					"sampler":0,
-					"target":{
-						"node":0,
-						"path":"translation"
-					}
-				}
+			"name":"\u015fimsek2metin.001",
+			"rotation":[
+				0.7071068286895752,
+				0,
+				0,
+				0.7071068286895752
 			],
-			"name":"Plane.011Action",
-			"samplers":[
-				{
-					"input":4,
-					"interpolation":"LINEAR",
-					"output":5
-				}
+			"scale":[
+				3.1506853103637695,
+				1.5891201496124268,
+				3.1506857872009277
+			],
+			"translation":[
+				0,
+				0,
+				0.027235258370637894
 			]
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
-			"name":"PencereSolar.005",
+			"name":"PencereSolar.009",
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
 					0.9822452664375305,
@@ -62,7 +52,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.037",
+			"name":"Text.066",
 			"primitives":[
 				{
 					"attributes":{
@@ -80,96 +70,68 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":54,
+			"count":2407,
 			"max":[
-				-0.04838629439473152,
-				-0.5539284348487854,
-				0.0224106814712286
+				-0.09592446684837341,
+				0.0010000000474974513,
+				0.3494639992713928
 			],
 			"min":[
-				-0.0704515352845192,
-				-0.5936838984489441,
-				0.014801984652876854
+				-0.14580334722995758,
+				-0.0010000000474974513,
+				0.34247907996177673
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":54,
+			"count":2407,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":54,
+			"count":2407,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":96,
+			"count":7080,
 			"type":"SCALAR"
-		},
-		{
-			"bufferView":4,
-			"componentType":5126,
-			"count":49,
-			"max":[
-				2
-			],
-			"min":[
-				0
-			],
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":5,
-			"componentType":5126,
-			"count":49,
-			"type":"VEC3"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":648,
+			"byteLength":28884,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":648,
-			"byteOffset":648,
+			"byteLength":28884,
+			"byteOffset":28884,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":432,
-			"byteOffset":1296,
+			"byteLength":19256,
+			"byteOffset":57768,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":192,
-			"byteOffset":1728,
+			"byteLength":14160,
+			"byteOffset":77024,
 			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":196,
-			"byteOffset":1920
-		},
-		{
-			"buffer":0,
-			"byteLength":588,
-			"byteOffset":2116
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":2704,
-			"uri":"Simsek3.bin"
+			"byteLength":91184,
+			"uri":"Simsek2text.bin"
 		}
 	]
 }

@@ -15,39 +15,18 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Simsek2.3",
-			"scale":[
-				1.840000033378601,
-				1.840000033378601,
-				1.840000033378601
-			]
-		}
-	],
-	"animations":[
-		{
-			"channels":[
-				{
-					"sampler":0,
-					"target":{
-						"node":0,
-						"path":"translation"
-					}
-				}
-			],
-			"name":"Plane.011Action",
-			"samplers":[
-				{
-					"input":4,
-					"interpolation":"LINEAR",
-					"output":5
-				}
+			"name":"\u015fimsek1",
+			"translation":[
+				-0.5182239413261414,
+				-0.7648651003837585,
+				-0.032906949520111084
 			]
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
-			"name":"PencereSolar.005",
+			"name":"PencereSolar.009",
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
 					0.9822452664375305,
@@ -62,7 +41,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.037",
+			"name":"Plane.073",
 			"primitives":[
 				{
 					"attributes":{
@@ -82,14 +61,14 @@
 			"componentType":5126,
 			"count":54,
 			"max":[
-				-0.04838629439473152,
-				-0.5539284348487854,
-				0.0224106814712286
+				0.15518486499786377,
+				0.37308651208877563,
+				0.06488208472728729
 			],
 			"min":[
-				-0.0704515352845192,
-				-0.5936838984489441,
-				0.014801984652876854
+				0.11131691932678223,
+				0.2940486669540405,
+				0.04975523054599762
 			],
 			"type":"VEC3"
 		},
@@ -110,24 +89,6 @@
 			"componentType":5123,
 			"count":96,
 			"type":"SCALAR"
-		},
-		{
-			"bufferView":4,
-			"componentType":5126,
-			"count":49,
-			"max":[
-				2
-			],
-			"min":[
-				0
-			],
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":5,
-			"componentType":5126,
-			"count":49,
-			"type":"VEC3"
 		}
 	],
 	"bufferViews":[
@@ -154,22 +115,12 @@
 			"byteLength":192,
 			"byteOffset":1728,
 			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":196,
-			"byteOffset":1920
-		},
-		{
-			"buffer":0,
-			"byteLength":588,
-			"byteOffset":2116
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":2704,
-			"uri":"Simsek3.bin"
+			"byteLength":1920,
+			"uri":"Simsek1.bin"
 		}
 	]
 }
