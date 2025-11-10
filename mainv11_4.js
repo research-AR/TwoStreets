@@ -799,9 +799,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const parts = [];            // roots per part (in reveal order)
             let timers = [];
             let allLoaded = 0;
-            const failedParts = new Set();
-            const maxRevealRetries = 20;
-            const retryDelay = 200;
 
             const clearTimers = () => { timers.forEach(id => clearTimeout(id)); timers = []; };
 
@@ -820,25 +817,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateNavigationButtons();
             }
 
-            function revealPart(i, attempt = 0) {
-                if (failedParts.has(i)) {
-                    console.warn(`Skipping reveal for part ${i} - marked as failed to load.`);
-                    return;
-                }
+            function revealPart(i) {
                 if (exclusive) parts.forEach((p, j) => { if (p) p.visible = (j === i); });
 
                 const p = parts[i];
-                if (!p) {
-                    if (attempt < maxRevealRetries) {
-                        console.warn(`Part ${i} not yet ready (attempt ${attempt + 1}/${maxRevealRetries}). Retrying in ${retryDelay}ms.`);
-                        const retryTimer = setTimeout(() => revealPart(i, attempt + 1), retryDelay);
-                        timers.push(retryTimer);
-                    } else {
-                        console.error(`Part ${i} failed to appear after ${maxRevealRetries} retries. Check asset availability.`);
-                        failedParts.add(i);
-                    }
-                    return;
-                }
+                if (!p) return;
 
                 console.log(`Revealing part ${i}`);
                 p.visible = true;
@@ -880,7 +863,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const relativeTime = Math.max(0, absoluteTime - firstTime);
                     const id = setTimeout(() => {
                         console.log(`Revealing part ${i} at ${relativeTime}ms (relative to first part at ${firstTime}ms)`);
-                        revealPart(i, 0);
+                        revealPart(i);
                     }, relativeTime);
                     timers.push(id);
                 });
@@ -1027,15 +1010,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (models[slot] === group && index === slot && targetFound) {
                         slotControllers[slot].startSequenceIfReady();
                     }
-                },
-                undefined,
-                (error) => {
-                    console.error(`Failed to load composite part ${i} (${path})`, error);
-                    failedParts.add(i);
-                    allLoaded++;
-                    if (models[slot] === group && index === slot && targetFound) {
-                        slotControllers[slot].startSequenceIfReady();
-                    }
                 });
             });
         }
@@ -1052,9 +1026,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const parts = [];
             let timers = [];
             let allLoaded = 0;
-            const failedParts = new Set();
-            const maxRevealRetries = 20;
-            const retryDelay = 200;
 
             const clearTimers = () => { timers.forEach(id => clearTimeout(id)); timers = []; };
 
@@ -1069,11 +1040,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 secondUpdateNavigationButtons();
             }
 
-            function revealPart(i, attempt = 0) {
-                if (failedParts.has(i)) {
-                    console.warn(`[Second Target] Skipping reveal for part ${i} - marked as failed to load.`);
-                    return;
-                }
+            function revealPart(i) {
                 if (exclusive) {
                     parts.forEach((p, j) => {
                         if (p) {
@@ -1084,17 +1051,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 const p = parts[i];
-                if (!p) {
-                    if (attempt < maxRevealRetries) {
-                        console.warn(`[Second Target] Part ${i} not yet ready (attempt ${attempt + 1}/${maxRevealRetries}). Retrying in ${retryDelay}ms.`);
-                        const retryTimer = setTimeout(() => revealPart(i, attempt + 1), retryDelay);
-                        timers.push(retryTimer);
-                    } else {
-                        console.error(`[Second Target] Part ${i} failed to appear after ${maxRevealRetries} retries. Check asset availability.`);
-                        failedParts.add(i);
-                    }
-                    return;
-                }
+                if (!p) return;
                 console.log(`[Second Target] Revealing part ${i}`);
                 p.visible = true;
                 startAnimationsForPart(p);
@@ -1159,7 +1116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const relativeTime = Math.max(0, absoluteTime - firstTime);
                     const id = setTimeout(() => {
                         console.log(`[Target 2] Revealing part ${i} at ${relativeTime}ms (relative to first part at ${firstTime}ms)`);
-                        revealPart(i, 0);
+                        revealPart(i);
                     }, relativeTime);
                     timers.push(id);
                 });
@@ -1268,7 +1225,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     undefined,
                     (error) => {
                         console.error(`[Second Target] Failed to load part ${i}: ${path}`, error);
-                        failedParts.add(i);
                         // Continue even if one part fails - mark as "loaded" to prevent blocking
                         allLoaded++;
                         // If this was the last part and target is found, still try to start sequence
@@ -1835,15 +1791,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 "./assets/DataModel11_3/Franz/Sahne1/yazi2.gltf", 
                 "./assets/DataModel11_3/Franz/Sahne1/yazi3.gltf", 
                 "./assets/DataModel11_3/Franz/Sahne2/yazi2.gltf", 
-                "./assets/DataModel11_3/Franz/Sahne2/simsek2.gltf",                  
+                "./assets/DataModel11_3/Franz/Sahne2/Simsek2.gltf",                  
                 "./assets/DataModel11_3/Franz/Sahne2/binaacilacak1.gltf",                
                 "./assets/DataModel11_3/Franz/Sahne2/binaacilacak2.gltf",                
                 "./assets/DataModel11_3/Franz/Sahne2/binaacilacak3.gltf",                
                 "./assets/DataModel11_3/Franz/Sahne2/binaacilacak4.gltf",                
                 "./assets/DataModel11_3/Franz/Sahne2/binaacilacak5.gltf",       
                 "./assets/DataModel11_3/Franz/Sahne2/arkaplan.gltf",
-                "./assets/DataModel11_3/Franz/Sahne2/simsek2ghost.gltf", 
-                "./assets/DataModel11_3/Franz/Sahne2/simsek3.gltf", 
+                "./assets/DataModel11_3/Franz/Sahne2/Simsek2ghost.gltf", 
+                "./assets/DataModel11_3/Franz/Sahne2/Simsek3.gltf", 
                 "./assets/DataModel11_3/Franz/Sahne2/isik4.gltf",
                 "./assets/DataModel11_3/Franz/Sahne2/isik1.gltf",                         
                 "./assets/DataModel11_3/Franz/Sahne2/isik2.gltf",                         
@@ -1855,7 +1811,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "./assets/DataModel11_3/Franz/Sahne3/yazi2.gltf",
                 "./assets/DataModel11_3/Franz/Bar/Barsabit.gltf",
                 "./assets/DataModel11_3/Franz/Bar/Bar2.gltf",  
-                "./assets/DataModel11_3/Franz/Bar/ok.gltf",  
+                "./assets/DataModel11_3/Franz/Bar/Ok.gltf",  
                 "./assets/DataModel11_3/Franz/Bar/Bar3.gltf",  
                 "./assets/DataModel11_3/Franz/Bar/simsek.gltf", 
                 "./assets/DataModel11_3/Franz/Bar/simsekghost.gltf", 
