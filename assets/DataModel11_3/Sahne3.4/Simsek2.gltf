@@ -18,7 +18,7 @@
 			"name":"Plane.001",
 			"translation":[
 				-0.0003404200542718172,
-				0.2918797433376312,
+				0.29187971353530884,
 				-0.004796917550265789
 			]
 		},
@@ -34,7 +34,7 @@
 			],
 			"translation":[
 				0.001215299591422081,
-				-1.0420106649398804,
+				-1.019228458404541,
 				0.017124997451901436
 			]
 		}
@@ -130,9 +130,9 @@
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":109,
+			"count":55,
 			"max":[
-				4.5
+				2.25
 			],
 			"min":[
 				0
@@ -142,7 +142,7 @@
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":109,
+			"count":55,
 			"type":"VEC3"
 		}
 	],
@@ -173,18 +173,18 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":436,
+			"byteLength":220,
 			"byteOffset":1920
 		},
 		{
 			"buffer":0,
-			"byteLength":1308,
-			"byteOffset":2356
+			"byteLength":660,
+			"byteOffset":2140
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":3664,
+			"byteLength":2800,
 			"uri":"Simsek2.bin"
 		}
 	]

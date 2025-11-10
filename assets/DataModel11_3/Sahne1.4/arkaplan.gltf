@@ -33,12 +33,12 @@
 		{
 			"alphaMode":"BLEND",
 			"doubleSided":true,
-			"name":"Material.005",
+			"name":"Material.004",
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
-					0.7758182287216187,
-					0.18116439878940582,
-					0.0030353262554854155,
+					0.9822452664375305,
+					0.38132646679878235,
+					0.0030353753827512264,
 					0.5
 				],
 				"metallicFactor":0,

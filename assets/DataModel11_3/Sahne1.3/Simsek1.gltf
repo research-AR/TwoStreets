@@ -8,7 +8,7 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				1
+				0
 			]
 		}
 	],
@@ -16,47 +16,15 @@
 		{
 			"mesh":0,
 			"name":"Plane.005",
-			"translation":[
-				0.182037353515625,
-				0.48052978515625,
-				-0.013031005859375
-			]
-		},
-		{
-			"children":[
-				0
-			],
-			"name":"SimseK1.1",
 			"scale":[
 				0.0010000001639127731,
 				0.0010000001639127731,
 				0.0010000001639127731
 			],
 			"translation":[
-				-0.38043490052223206,
-				-1.0042284727096558,
-				0.02723534032702446
-			]
-		}
-	],
-	"animations":[
-		{
-			"channels":[
-				{
-					"sampler":0,
-					"target":{
-						"node":1,
-						"path":"scale"
-					}
-				}
-			],
-			"name":"Simsel1.1Action.004",
-			"samplers":[
-				{
-					"input":4,
-					"interpolation":"LINEAR",
-					"output":5
-				}
+				-0.380252867937088,
+				-1.0187407732009888,
+				0.02722230926156044
 			]
 		}
 	],
@@ -99,13 +67,13 @@
 			"count":54,
 			"max":[
 				-0.17069777846336365,
-				-0.48049214482307434,
-				0.02063995599746704
+				-0.4876691699028015,
+				0.02063995786011219
 			],
 			"min":[
 				-0.19276303052902222,
-				-0.5202475786209106,
-				0.01303126197308302
+				-0.5274246335029602,
+				0.013031264767050743
 			],
 			"type":"VEC3"
 		},
@@ -126,24 +94,6 @@
 			"componentType":5123,
 			"count":96,
 			"type":"SCALAR"
-		},
-		{
-			"bufferView":4,
-			"componentType":5126,
-			"count":73,
-			"max":[
-				3
-			],
-			"min":[
-				0
-			],
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":5,
-			"componentType":5126,
-			"count":73,
-			"type":"VEC3"
 		}
 	],
 	"bufferViews":[
@@ -170,21 +120,11 @@
 			"byteLength":192,
 			"byteOffset":1728,
 			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":292,
-			"byteOffset":1920
-		},
-		{
-			"buffer":0,
-			"byteLength":876,
-			"byteOffset":2212
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":3088,
+			"byteLength":1920,
 			"uri":"Simsek1.bin"
 		}
 	]

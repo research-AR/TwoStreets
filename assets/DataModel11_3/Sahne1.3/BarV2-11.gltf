@@ -15,21 +15,21 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Cube.002",
+			"name":"Plane.049",
 			"rotation":[
-				0,
-				0,
-				-0.3826833963394165,
-				0.9238795638084412
+				0.6532815098762512,
+				-0.2705981731414795,
+				-0.27059808373451233,
+				0.6532813906669617
 			],
 			"scale":[
-				1.666668176651001,
-				0.7921752333641052,
-				1.3333345651626587
+				0.035330161452293396,
+				0.0353301577270031,
+				0.035330161452293396
 			],
 			"translation":[
-				0.26714184880256653,
-				0.96868896484375,
+				0.26714178919792175,
+				0.96856689453125,
 				-0.032235343009233475
 			]
 		},
@@ -45,7 +45,7 @@
 			],
 			"translation":[
 				-0.26714184880256653,
-				-0.9686066508293152,
+				-0.9685326218605042,
 				0.032235343009233475
 			]
 		}
@@ -64,9 +64,9 @@
 			"name":"EmptyAction.004",
 			"samplers":[
 				{
-					"input":3,
+					"input":4,
 					"interpolation":"LINEAR",
-					"output":4
+					"output":5
 				}
 			]
 		}
@@ -89,14 +89,15 @@
 	],
 	"meshes":[
 		{
-			"name":"Cube.046",
+			"name":"Plane.055",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":0,
-						"NORMAL":1
+						"NORMAL":1,
+						"TEXCOORD_0":2
 					},
-					"indices":2,
+					"indices":3,
 					"material":0
 				}
 			]
@@ -106,33 +107,39 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":48,
+			"count":22,
 			"max":[
-				0.3028560280799866,
-				-1.0762215852737427,
-				0.027926484122872353
+				14.537817001342773,
+				1.0539292097091675,
+				25.231098175048828
 			],
 			"min":[
-				0.28485605120658875,
-				-1.1140919923782349,
-				0.020426489412784576
+				13.537817001342773,
+				0.7075282335281372,
+				24.231098175048828
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":48,
+			"count":22,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
-			"componentType":5123,
-			"count":72,
-			"type":"SCALAR"
+			"componentType":5126,
+			"count":22,
+			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
+			"componentType":5123,
+			"count":36,
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":4,
 			"componentType":5126,
 			"count":5,
 			"max":[
@@ -144,7 +151,7 @@
 			"type":"SCALAR"
 		},
 		{
-			"bufferView":4,
+			"bufferView":5,
 			"componentType":5126,
 			"count":5,
 			"type":"VEC3"
@@ -153,36 +160,42 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":576,
+			"byteLength":264,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":576,
-			"byteOffset":576,
+			"byteLength":264,
+			"byteOffset":264,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":144,
-			"byteOffset":1152,
+			"byteLength":176,
+			"byteOffset":528,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":72,
+			"byteOffset":704,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":20,
-			"byteOffset":1296
+			"byteOffset":776
 		},
 		{
 			"buffer":0,
 			"byteLength":60,
-			"byteOffset":1316
+			"byteOffset":796
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":1376,
+			"byteLength":856,
 			"uri":"BarV2-11.bin"
 		}
 	]

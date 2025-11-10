@@ -15,38 +15,38 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Cube.021",
+			"name":"Plane.050",
 			"rotation":[
-				0,
-				0,
-				-0.3826834261417389,
-				0.9238795638084412
+				0.6532815098762512,
+				-0.2705981731414795,
+				-0.27059808373451233,
+				0.6532813906669617
 			],
 			"scale":[
-				1.6666682958602905,
-				0.7921752333641052,
-				1.3333345651626587
+				0.035330161452293396,
+				0.0353301577270031,
+				0.035330161452293396
 			],
 			"translation":[
-				-0.34308284521102905,
-				0.9815673828125,
-				-0.032608721405267715
+				-0.3430829346179962,
+				0.9635009765625,
+				-0.03260872885584831
 			]
 		},
 		{
 			"children":[
 				0
 			],
-			"name":"Bar11.001",
+			"name":"Bar11.004",
 			"scale":[
 				1,
-				0.0009999871253967285,
+				0.0010000000474974513,
 				1
 			],
 			"translation":[
-				0.34308290481567383,
-				-0.9815523028373718,
-				0.032608721405267715
+				0.3430829346179962,
+				-0.9635324478149414,
+				0.03260872885584831
 			]
 		}
 	],
@@ -61,12 +61,12 @@
 					}
 				}
 			],
-			"name":"Bar11.001Action.001",
+			"name":"EmptyAction.006",
 			"samplers":[
 				{
-					"input":3,
+					"input":4,
 					"interpolation":"LINEAR",
-					"output":4
+					"output":5
 				}
 			]
 		}
@@ -89,14 +89,15 @@
 	],
 	"meshes":[
 		{
-			"name":"Cube.070",
+			"name":"Plane.056",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":0,
-						"NORMAL":1
+						"NORMAL":1,
+						"TEXCOORD_0":2
 					},
-					"indices":2,
+					"indices":3,
 					"material":0
 				}
 			]
@@ -106,33 +107,39 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":48,
+			"count":22,
 			"max":[
-				0.5672445297241211,
-				-0.5430818796157837,
-				0.028206517919898033
+				26.650930404663086,
+				1.0644943714141846,
+				12.917826652526855
 			],
 			"min":[
-				0.5492445230484009,
-				-0.5809522867202759,
-				0.020706523209810257
+				25.650930404663086,
+				0.7180933952331543,
+				11.917826652526855
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":48,
+			"count":22,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
-			"componentType":5123,
-			"count":72,
-			"type":"SCALAR"
+			"componentType":5126,
+			"count":22,
+			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
+			"componentType":5123,
+			"count":36,
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":4,
 			"componentType":5126,
 			"count":5,
 			"max":[
@@ -144,7 +151,7 @@
 			"type":"SCALAR"
 		},
 		{
-			"bufferView":4,
+			"bufferView":5,
 			"componentType":5126,
 			"count":5,
 			"type":"VEC3"
@@ -153,36 +160,42 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":576,
+			"byteLength":264,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":576,
-			"byteOffset":576,
+			"byteLength":264,
+			"byteOffset":264,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":144,
-			"byteOffset":1152,
+			"byteLength":176,
+			"byteOffset":528,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":72,
+			"byteOffset":704,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":20,
-			"byteOffset":1296
+			"byteOffset":776
 		},
 		{
 			"buffer":0,
 			"byteLength":60,
-			"byteOffset":1316
+			"byteOffset":796
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":1376,
+			"byteLength":856,
 			"uri":"BarV2-11.bin"
 		}
 	]

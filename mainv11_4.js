@@ -78,6 +78,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- Scene completion tracking ---
         let viewedScenes = new Set(); // Track which scenes have been viewed (from first target)
         let allScenesCompleted = false; // Track if all first target scenes are finished
+        let secondTargetPromptShown = false; // Ensure we only trigger the prompt once
+        let secondTargetPromptElem = null;
+        let secondTargetPromptTimer = null;
+        let secondTargetArrow = null;
+        let shouldShowSecondTargetArrow = false;
+        let secondTargetPromptDelayTimer = null;
+        let awaitingSecondTarget = false;
 
         const loader = new GLTFLoader();
 
@@ -103,6 +110,114 @@ document.addEventListener('DOMContentLoaded', () => {
                     updateLabel();
                     updateNavigationButtons(); // Enable navigation to second target
                 }
+            }
+        }
+        
+        function ensureSecondTargetPromptElement() {
+            if (secondTargetPromptElem) return secondTargetPromptElem;
+            const prompt = document.createElement('div');
+            prompt.id = 'second-target-prompt';
+            prompt.style.cssText = `
+                position: fixed;
+                inset: 0;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                z-index: 10001;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+                opacity: 0;
+            `;
+            const content = document.createElement('div');
+            content.style.cssText = `
+                max-width: min(320px, 80vw);
+                padding: 24px 28px;
+                border-radius: 20px;
+                background: rgba(25, 28, 36, 0.9);
+                color: #ffffff;
+                font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+                text-align: center;
+                line-height: 1.4;
+                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+                pointer-events: auto;
+            `;
+            content.innerHTML = `
+                <div style="font-size:18px; font-weight:700; margin-bottom:8px;">Move to the other sign</div>
+                <div style="font-size:15px;">Great! You've finished this part. Point your camera at the next marker to continue.</div>
+            `;
+            prompt.appendChild(content);
+            document.body.appendChild(prompt);
+            secondTargetPromptElem = prompt;
+            return prompt;
+        }
+        
+        function showSecondTargetPrompt() {
+            const prompt = ensureSecondTargetPromptElement();
+            prompt.style.display = 'flex';
+            requestAnimationFrame(() => { prompt.style.opacity = '1'; });
+        }
+        
+        function hideSecondTargetPrompt() {
+            if (!secondTargetPromptElem) return;
+            secondTargetPromptElem.style.opacity = '0';
+            clearTimeout(secondTargetPromptDelayTimer);
+            secondTargetPromptDelayTimer = null;
+            clearTimeout(secondTargetPromptTimer);
+            secondTargetPromptTimer = setTimeout(() => {
+                if (secondTargetPromptElem) {
+                    secondTargetPromptElem.style.display = 'none';
+                }
+            }, 300);
+        }
+        
+        function showSecondTargetArrow() {
+            shouldShowSecondTargetArrow = true;
+            if (secondTargetArrow) {
+                secondTargetArrow.visible = true;
+            }
+        }
+        
+        function hideSecondTargetArrow() {
+            shouldShowSecondTargetArrow = false;
+            if (secondTargetArrow) {
+                secondTargetArrow.visible = false;
+            }
+        }
+        
+        function showReplayButton() {
+            replayB.style.display = '';
+        }
+        
+        function hideReplayButton() {
+            replayB.style.display = 'none';
+        }
+        
+        function showNavigationArrows() {
+            prevB.style.display = '';
+            nextB.style.display = '';
+        }
+        
+        function hideNavigationArrows() {
+            prevB.style.display = 'none';
+            nextB.style.display = 'none';
+        }
+        
+        function handleFirstTargetCompletion() {
+            if (secondTargetPromptShown) return;
+            secondTargetPromptShown = true;
+            allScenesCompleted = true;
+            console.log('✅ All first target scenes complete. Prompting user to move to the second sign.');
+            clearTimeout(secondTargetPromptDelayTimer);
+            secondTargetPromptDelayTimer = setTimeout(() => {
+                awaitingSecondTarget = true;
+                showSecondTargetPrompt();
+                showSecondTargetArrow();
+                hideNavigationArrows();
+                hideReplayButton();
+                targetFound = false;
+            }, 2000);
+            if (!secondAnchorInitialized) {
+                initializeSecondAnchor();
             }
         }
         
@@ -282,9 +397,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('⚠️ Target 1 found but Target 2 is active - ignoring to prevent interference');
                 return; // Don't activate first target if another is active
             }
+            if (awaitingSecondTarget) {
+                console.log('⚠️ Target 1 found but we are awaiting the second target - ignoring.');
+                return;
+            }
             
             console.log('🎯 Target 1 found! Activating...');
             hud.hidden = false; 
+            showNavigationArrows();
+        showReplayButton();
             
             // Hide all other targets' models
             secondModels.forEach(m => { if (m) m.visible = false; });
@@ -455,6 +576,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // ============ LOAD OCCLUDERS (for SECOND target) ============
         const secondTargetOccluders = [];
+        
+        // ============ LOAD SECOND TARGET ARROW GUIDE ============
+        loader.load(
+            "./assets/DataModel11_3/Sahne3.4/baryanson.gltf",
+            (gltf) => {
+                secondTargetArrow = gltf.scene;
+                secondTargetArrow.name = 'second-target-guide-arrow';
+                secondTargetArrow.visible = shouldShowSecondTargetArrow;
+                secondTargetArrow.traverse(o => {
+                    if (o.isMesh) {
+                        o.castShadow = false;
+                        o.receiveShadow = false;
+                    }
+                });
+                prepContent(secondTargetArrow);
+                smoothed.add(secondTargetArrow);
+                if (!shouldShowSecondTargetArrow) {
+                    secondTargetArrow.visible = false;
+                }
+                console.log('[Guide] Second target arrow loaded and attached to smoothed group.');
+            },
+            undefined,
+            (err) => console.error('[GLTF] second target arrow load error:', err)
+        );
         
         function showSecondTargetOccluders() {
             secondTargetOccluders.forEach(occ => { if (occ) occ.visible = true; });
@@ -642,7 +787,7 @@ document.addEventListener('DOMContentLoaded', () => {
             files,
             timing, // array of absolute times in ms, e.g. [0, 2000, 5000] means: part0 at 0ms, part1 at 2000ms, part2 at 5000ms
             hideAfter, // array of durations in ms, e.g. [3000, 0, 0] means: part0 hides after 3s, part1&2 stay forever
-            { resetOnLeave=true, exclusive=false, resetOnEnter=true } = {}
+            { resetOnLeave=true, exclusive=false, resetOnEnter=true, onComplete=null } = {}
         ) {
             const group = new THREE.Group();
             group.name = `composite-slot-${slot}`;
@@ -767,6 +912,7 @@ document.addEventListener('DOMContentLoaded', () => {
             slotControllers[slot] = {
                 isComposite: true, // Flag to identify this as a composite slot
                 started: false, // Track if sequence has started
+                completed: false,
                 
                 onEnter() {
                     console.log(`[Target 1] Composite slot ${slot} entered, targetFound: ${targetFound}, allLoaded: ${allLoaded}/${files.length}`);
@@ -777,6 +923,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         clearTimers();
                         hideAllParts();
                         this.started = false;
+                        this.completed = false;
                     }
                     
                     // Check if target is already found and start sequence immediately
@@ -792,6 +939,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     clearTimers();
                     if (resetOnLeave) { hideAllParts(); }
                     this.started = false;
+                    if (!resetOnEnter) {
+                        this.completed = false;
+                    }
                 },
                 startSequenceIfReady() {
                     // Only start if target is found and we haven't started yet
@@ -822,6 +972,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     if (result) {
                         console.log(`✅ Slot ${slot}: All permanent parts are visible! Navigation enabled.`);
+                        if (onComplete && !this.completed && this.started && allLoaded >= files.length) {
+                            this.completed = true;
+                            try {
+                                onComplete(slot);
+                            } catch (err) {
+                                console.error(`[Composite] onComplete callback for slot ${slot} failed:`, err);
+                            }
+                        }
                     }
                     return result;
                 }
@@ -1092,13 +1250,14 @@ document.addEventListener('DOMContentLoaded', () => {
             //gunes
             "./assets/DataModel11_3/Sahne1.1/gunes.gltf",   
             //mevcut
-            "./assets/DataModel11_3/Sahne1.1/Bina.gltf",            
+            "./assets/DataModel11_3/Sahne1.1/Bina.gltf",    
+            "./assets/DataModel11_3/Sahne1.1/Binakapanacak1.gltf",   
+            "./assets/DataModel11_3/Sahne1.1/Binakapanacak2.gltf",           
             //soru
             "./assets/DataModel11_3/Sahne1.1/Soru1.1.gltf",  
             "./assets/DataModel11_3/Sahne1.1/Soru1.2.gltf", 
             "./assets/DataModel11_3/Sahne1.1/Soru1.3.gltf", 
             "./assets/DataModel11_3/Sahne1.1/Soru1.4.gltf",  
-            "./assets/DataModel11_3/Sahne1.1/arkaplan.gltf",  
 
             //enerji işaret
             "./assets/DataModel11_3/Sahne1.3/Simsek1.gltf", 
@@ -1124,25 +1283,25 @@ document.addEventListener('DOMContentLoaded', () => {
             "./assets/DataModel11_3/Sahne1.3/Simsek4.gltf", 
 
             //sahne1.4
-            "./assets/DataModel11_3/Sahne1.4/arkaplan.gltf",             
+            "./assets/DataModel11_3/Sahne1.4/arkaplan.gltf",              
             "./assets/DataModel11_3/Sahne1.4/Pencere1.gltf",  
             "./assets/DataModel11_3/Sahne1.4/Pencere2.gltf",                   
 
-        ],  [0, 0,
-            2000, 2250, 2500, 2750, 3000,
-            5001, 9000, 9000,
-            9000, 9750, 10500, 11250, 12000, 12750, 
-            13000, 13500, 15500, 15833,
-            13500, 17000,17000,
-            17000, 17000, 18000], 
+        ],  [0, 0, 0, 0,
+            2000, 2250, 2500, 2750,
+            3000, 4000, 4000,
+            4000, 4250, 4500, 4750, 5000, 5250,
+            6000, 6500, 8500, 8833,
+            6500, 9000, 9000,
+            9000, 9500, 10000], 
             
-            [0, 0,
-            0,0,0,0, 0,
-            3999, 0, 4500,
+            [0, 0, 0, 0,
+            0,0,0,0,
+            3500, 2500, 2500,
             0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 
-            3500, 0, 0,
-            0, 0, 0], {
+            2500, 0, 0,
+            0, 0, 0,], {
 
             exclusive: false,
             resetOnLeave: true,
@@ -1151,7 +1310,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         loadComposite(1, [
             //sahne2.1 mevcut           
-            "./assets/DataModel11_3/Sahne2.1/mevcut.gltf", 
+            "./assets/DataModel11_3/Sahne2.1/mevcut.gltf",
             //gunes
             "./assets/DataModel11_3/Sahne2.1/gunes.gltf",   
             //soru
@@ -1184,8 +1343,6 @@ document.addEventListener('DOMContentLoaded', () => {
             "./assets/DataModel11_3/Sahne2.2/acilacakbina/BinaGrup7.gltf",
             "./assets/DataModel11_3/Sahne2.2/acilacakbina/BinaGrup8.gltf",
             "./assets/DataModel11_3/Sahne2.2/acilacakbina/BinaGrup9.gltf",
-
-            "./assets/DataModel11_3/Sahne2.2/arkaplan.gltf",
 
             "./assets/DataModel11_3/Sahne2.2/sayilar/arkaplan.gltf",           
             "./assets/DataModel11_3/Sahne2.2/sayilar/sayi1.gltf",
@@ -1221,8 +1378,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "./assets/DataModel11_3/Sahne2.3/Simsek3ghost.gltf",
             "./assets/DataModel11_3/Sahne2.3/Simsek4.gltf",
 
-            "./assets/DataModel11_3/Sahne2.3/arkaplan.gltf",           
-
+            "./assets/DataModel11_3/Sahne2.3/arkaplan.gltf",
             "./assets/DataModel11_3/Sahne2.3/Pencere/Penceregrup1.gltf",
             "./assets/DataModel11_3/Sahne2.3/Pencere/Penceregrup2.gltf",
             "./assets/DataModel11_3/Sahne2.3/Pencere/Penceregrup3.gltf",
@@ -1236,32 +1392,28 @@ document.addEventListener('DOMContentLoaded', () => {
             1000, 1250, 1500, 1750, 2000,//soru
             4000, // elektrik üretim
             0, 0, 0, 0, 0, 0, 0, 0, 0,//kapanacakbina
-            4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, //açılacakbina
-            15000,
-            4000, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000,
-            10000,10000, //kullanılan enerji
-            10000, 10500, 11000, 11500, 12000, 12500, 13000, 13500, 14000, 14500,//mevcutpencere
-            15000, 15500, 19500, 19834,
-            15500, 19000, 19000,
-            20000,
-            20000, 20250, 20500, 20750, 21000,
+            4000, 4250, 4500, 4750, 5000, 5250, 5500, 5750, 6000, //açılacakbina
+            4000, 4000, 4250, 4500, 4750, 5000, 5250, 5500, 5750, 6000,
+            7000,7000, //kullanılan enerji
+            7000, 7250, 7500, 7750, 8000, 8250, 8500, 8750, 9000, 9250,//mevcutpencere
+            10000, 10500, 14500, 14834,
+            10500, 14000, 14000,
+            15000, 15000, 15250, 15500, 15750, 16000,
         ], 
         
         // HideAfter array - how long each part stays (0 = forever)
         [   0,  //mevcut
             0, //gunes
             0, 0, 0, 0, 0,
-            6000,
-            4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 
+            3000,
+            4000, 4250, 4500, 4750, 5000, 5250, 5500, 5750, 6000,
             0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 
-            0, 500, 500, 500, 500, 500, 500, 500, 500, 0,
-            0, 5500,
+            0, 250, 250, 250, 250, 250, 250, 250, 250, 0,
+            3500, 3500,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0,
-            4000, 0, 0,
-            0,
-            0, 0, 0, 0, 0,
+            3500, 0, 0,
+            0, 0, 0, 0, 0, 0,
         ], {
 
             exclusive: false,
@@ -1317,7 +1469,6 @@ document.addEventListener('DOMContentLoaded', () => {
             "./assets/DataModel11_3/Sahne3.2/Pencere/PencereGrup9.gltf",
             "./assets/DataModel11_3/Sahne3.2/Pencere/PencereGrup10.gltf",
 
-            "./assets/DataModel11_3/Sahne3.4/arkaplan.gltf",    
 
             "./assets/DataModel11_3/Sahne3.4/Bar1.gltf",   
             "./assets/DataModel11_3/Sahne3.4/Bar2.gltf",
@@ -1346,14 +1497,13 @@ document.addEventListener('DOMContentLoaded', () => {
             0, 0, 0,
             4000,
             0, 0, 0, 0, 0, 
-            4000, 4500, 5000, 5500, 6000,
-            4000, 4500, 5000, 5500, 6000,
-            7000,7000,
-            7000, 7500, 8000, 8500, 9000, 9500, 10000, 10500, 11000, 11500,
-            12500, 
-            13000, 13250, 13375, 14750, 15833, 17000,
-            13500,
-            18000, 18000, 18500, 18500, 19000, 19000, 19500, 19500, 20000, 20000,
+            4000, 4250, 4500, 4750, 5000,
+            4000, 4250, 4500, 4750, 5000,
+            6000, 6000,
+            6000, 6250, 6500, 6750, 7000, 7250, 7500, 7750, 8000, 8250,
+            9000, 9250, 9375, 10750, 11833, 13000,
+            9500,
+            14000, 14000, 14500, 14500, 15000, 15000, 15500, 15500, 16000, 16000,
 
 
             ],
@@ -1361,27 +1511,32 @@ document.addEventListener('DOMContentLoaded', () => {
             [0,
             0, 0, 0, 0,
             0, 0, 4000,
-            3000,   
+            2000,   
             4000, 4500, 5000, 5500, 6000, 
             0, 0, 0, 0, 0, 
             500, 500, 500, 500, 0,
-            0, 6500,
+            6500, 6500,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0,
             5000, 4750, 4245, 3250, 2177, 1000,
-            4500,
+            3500,
             250, 250, 250, 250, 250, 250, 250, 250, 0, 0,
 
             ], {
 
             exclusive: false,
             resetOnLeave: true,
-            resetOnEnter: true
+            resetOnEnter: true,
+            onComplete: handleFirstTargetCompletion
         });
 
         // ============ SECOND TARGET NAVIGATION ============
         // Navigation functions for second target (similar to first target)
         function secondApplyVisibility() {
+            if (!secondTargetActive) {
+                // Ensure second target content stays hidden without disrupting first target scenes
+                secondModels.forEach(m => { if (m) m.visible = false; });
+                return;
+            }
             // Hide all first target models when on second target
             models.forEach(m => { if (m) m.visible = false; });
             
@@ -1514,6 +1669,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('[Debug] Activating Target 2, current scene:', secondIndex);
                 console.log('[Debug] Second target model exists:', !!secondModels[secondIndex]);
                 console.log('[Debug] Second target controller exists:', !!secondSlotControllers[secondIndex]);
+                hideSecondTargetPrompt();
+                hideSecondTargetArrow();
+                hideNavigationArrows();
+                showReplayButton();
                 
                 // Hide all other targets' models
                 models.forEach(m => { if (m) m.visible = false; });
@@ -1532,6 +1691,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 secondTargetActive = true;
                 secondTargetFound = true;
+                awaitingSecondTarget = false;
                 // Show HUD for navigation
                 hud.hidden = false;
                 secondUpdateLabel();
@@ -1581,6 +1741,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log('[Debug] Current states - Target1:', targetFound, 'Target2:', secondTargetFound);
                     secondTargetActive = false;
                     secondTargetFound = false;
+                    hideSecondTargetPrompt();
                     // Always hide second target occluders on loss
                     hideSecondTargetOccluders();
                     // Only hide HUD if no other target is active
@@ -1589,6 +1750,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.log('[Debug] HUD hidden - no active targets');
                     }
                     hideSecondTargetContent();
+                    hideReplayButton();
+                    showSecondTargetPrompt();
+                    showSecondTargetArrow();
+                    hideNavigationArrows();
+                    if (targetFound) {
+                        showNavigationArrows();
+                    } else {
+                        hideNavigationArrows();
+                    }
+                awaitingSecondTarget = true;
                 }
             };
         }
@@ -1603,6 +1774,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 "./assets/DataModel11_3/Franz/Bar/Barsabit.gltf",
                 "./assets/DataModel11_3/Franz/Bar/Barkapanacak.gltf",
                 "./assets/DataModel11_3/Franz/Sahne1/gunes.gltf", 
+                "./assets/DataModel11_3/Franz/Sahne2/binakapanacak1.gltf",                
+                "./assets/DataModel11_3/Franz/Sahne2/binakapanacak2.gltf",                
+                "./assets/DataModel11_3/Franz/Sahne2/binakapanacak3.gltf",                
+                "./assets/DataModel11_3/Franz/Sahne2/binakapanacak4.gltf",                
+                "./assets/DataModel11_3/Franz/Sahne2/binakapanacak5.gltf",  
 
                 "./assets/DataModel11_3/Franz/Sahne2/yazi1.gltf", 
                 "./assets/DataModel11_3/Franz/Sahne1/yazi2.gltf", 
@@ -1634,11 +1810,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 "./assets/DataModel11_3/Franz/Sahne3/arkaplan.gltf",
                 "./assets/DataModel11_3/Franz/Sahne3/yazicevap.gltf",
             ], 
-            [0, 0, 0,
+            [0, 0, 0, 0, 0, 0, 0, 0,
             1000, 1250, 1500, 1750, 2500,3000, 3250, 3500, 3750, 4000, 4750, 5000, 5250, 5500, 5750,  
             8000, 8250, 8500, 8750, 10000, 10000, 11883, 10000, 14250, 14500, 14750, 14000, 14750,
             ],     // Timing
-            [0, 9000, 0,
+            [0, 9000, 0, 3000, 3250, 3500, 3750, 4000,
             6000, 5750, 5500, 5250, 7500, 0,  0, 0, 0, 0, 3250, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             ]);   

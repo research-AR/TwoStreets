@@ -17,8 +17,8 @@
 			"mesh":0,
 			"name":"Plane.018",
 			"translation":[
-				-0.0003404203162062913,
-				0.2918797731399536,
+				-0.0003404203453101218,
+				0.2918796241283417,
 				-0.004796918481588364
 			]
 		},
@@ -34,7 +34,7 @@
 			],
 			"translation":[
 				0.0012153013376519084,
-				-1.0420106649398804,
+				-1.019228458404541,
 				0.017124997451901436
 			]
 		}
@@ -130,9 +130,9 @@
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":49,
+			"count":25,
 			"max":[
-				2
+				1
 			],
 			"min":[
 				0
@@ -142,7 +142,7 @@
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":49,
+			"count":25,
 			"type":"VEC3"
 		}
 	],
@@ -173,18 +173,18 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":196,
+			"byteLength":100,
 			"byteOffset":1920
 		},
 		{
 			"buffer":0,
-			"byteLength":588,
-			"byteOffset":2116
+			"byteLength":300,
+			"byteOffset":2020
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":2704,
+			"byteLength":2320,
 			"uri":"Simsek1.bin"
 		}
 	]

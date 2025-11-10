@@ -23,7 +23,7 @@
 			],
 			"translation":[
 				-0.3430829644203186,
-				1.0072021484375,
+				0.9866943359375,
 				-0.03260872885584831
 			]
 		},
@@ -39,7 +39,7 @@
 			],
 			"translation":[
 				0.3430829346179962,
-				-1.0071742534637451,
+				-0.9867284297943115,
 				0.03260872885584831
 			]
 		}
@@ -58,9 +58,9 @@
 			"name":"Bar10.001Action.001",
 			"samplers":[
 				{
-					"input":3,
+					"input":5,
 					"interpolation":"LINEAR",
-					"output":4
+					"output":6
 				}
 			]
 		}
@@ -88,9 +88,11 @@
 				{
 					"attributes":{
 						"POSITION":0,
-						"NORMAL":1
+						"NORMAL":1,
+						"COLOR_0":2,
+						"COLOR_1":3
 					},
-					"indices":2,
+					"indices":4,
 					"material":0
 				}
 			]
@@ -102,13 +104,13 @@
 			"componentType":5126,
 			"count":24,
 			"max":[
-				0.209599569439888,
-				-0.9603391885757446,
+				0.21259956061840057,
+				-0.9635324478149414,
 				0.028206519782543182
 			],
 			"min":[
-				0.20209957659244537,
-				-1.0071742534637451,
+				0.1990995854139328,
+				-0.9867284297943115,
 				0.020706526935100555
 			],
 			"type":"VEC3"
@@ -121,12 +123,25 @@
 		},
 		{
 			"bufferView":2,
+			"componentType":5121,
+			"count":24,
+			"normalized":true,
+			"type":"VEC4"
+		},
+		{
+			"bufferView":3,
+			"componentType":5126,
+			"count":24,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":4,
 			"componentType":5123,
 			"count":36,
 			"type":"SCALAR"
 		},
 		{
-			"bufferView":3,
+			"bufferView":5,
 			"componentType":5126,
 			"count":9,
 			"max":[
@@ -138,7 +153,7 @@
 			"type":"SCALAR"
 		},
 		{
-			"bufferView":4,
+			"bufferView":6,
 			"componentType":5126,
 			"count":9,
 			"type":"VEC3"
@@ -159,24 +174,36 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":72,
+			"byteLength":96,
 			"byteOffset":576,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":288,
+			"byteOffset":672,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":72,
+			"byteOffset":960,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":36,
-			"byteOffset":648
+			"byteOffset":1032
 		},
 		{
 			"buffer":0,
 			"byteLength":108,
-			"byteOffset":684
+			"byteOffset":1068
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":792,
+			"byteLength":1176,
 			"uri":"BarV2-10.bin"
 		}
 	]

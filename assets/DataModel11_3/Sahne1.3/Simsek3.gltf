@@ -15,7 +15,12 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Simsek1.3"
+			"name":"Simsek1.3",
+			"translation":[
+				0,
+				-0.014999999664723873,
+				0
+			]
 		}
 	],
 	"animations":[

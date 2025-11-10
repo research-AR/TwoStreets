@@ -15,7 +15,7 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Sahne1Surplus2PencereSolar"
+			"name":"Building_019.016"
 		}
 	],
 	"materials":[
@@ -36,7 +36,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Building_020_Mesh.006",
+			"name":"Building_019_Mesh.019",
 			"primitives":[
 				{
 					"attributes":{
@@ -53,55 +53,55 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":64,
+			"count":30,
 			"max":[
 				-0.24673926830291748,
-				-0.7956521511077881,
-				0.06413046270608902
+				-0.9097825884819031,
+				0.041804373264312744
 			],
 			"min":[
-				-0.28586968779563904,
-				-0.8369565010070801,
-				0.06413046270608902
+				-0.2858697175979614,
+				-0.9326087236404419,
+				0.041804373264312744
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":64,
+			"count":30,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5123,
-			"count":96,
+			"count":48,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":768,
+			"byteLength":360,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":768,
-			"byteOffset":768,
+			"byteLength":360,
+			"byteOffset":360,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":192,
-			"byteOffset":1536,
+			"byteLength":96,
+			"byteOffset":720,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":1728,
+			"byteLength":816,
 			"uri":"Pencere2.bin"
 		}
 	]

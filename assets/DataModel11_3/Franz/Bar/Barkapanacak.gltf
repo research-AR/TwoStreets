@@ -8,38 +8,67 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				0
+				0,
+				1
 			]
 		}
 	],
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Cube.057",
+			"name":"Cube.072",
 			"rotation":[
 				-0.7071068286895752,
 				0.7071068286895752,
 				0,
-				1.3767879636361613e-07
+				1.1520234011186403e-07
 			],
 			"scale":[
 				1.6666550636291504,
 				4.634394645690918,
-				1.3333334922790527
+				1.3333332538604736
+			]
+		},
+		{
+			"mesh":1,
+			"name":"Plane.053",
+			"rotation":[
+				0.2705981135368347,
+				-0.6532815098762512,
+				-0.6532815098762512,
+				0.2705979347229004
+			],
+			"scale":[
+				0.035330161452293396,
+				0.028868278488516808,
+				0.03533000126481056
 			]
 		}
 	],
 	"materials":[
 		{
-			"alphaMode":"BLEND",
 			"doubleSided":true,
-			"name":"Material.004",
+			"name":"PencereSolar.008",
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
 					0.9822452664375305,
 					0.38132646679878235,
 					0.0030353753827512264,
-					0.5
+					1
+				],
+				"metallicFactor":0,
+				"roughnessFactor":0.5
+			}
+		},
+		{
+			"doubleSided":true,
+			"name":"PencereSolar.003",
+			"pbrMetallicRoughness":{
+				"baseColorFactor":[
+					0.9822452664375305,
+					0.38132646679878235,
+					0.0030353753827512264,
+					1
 				],
 				"metallicFactor":0,
 				"roughnessFactor":0.5
@@ -48,17 +77,29 @@
 	],
 	"meshes":[
 		{
-			"name":"Cube.064",
+			"name":"Cube.067",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":0,
-						"NORMAL":1,
-						"COLOR_0":2,
-						"COLOR_1":3
+						"NORMAL":1
 					},
-					"indices":4,
+					"indices":2,
 					"material":0
+				}
+			]
+		},
+		{
+			"name":"Plane.071",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":3,
+						"NORMAL":4,
+						"TEXCOORD_0":5
+					},
+					"indices":6,
+					"material":1
 				}
 			]
 		}
@@ -67,80 +108,113 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":103,
+			"count":24,
 			"max":[
-				0.3452814221382141,
-				0.12244278192520142,
-				-0.033041391521692276
+				0.3393037021160126,
+				0.12244275957345963,
+				-0.03304110839962959
 			],
 			"min":[
-				0.3198254406452179,
-				0.09560518711805344,
-				-0.040541768074035645
+				0.3258035480976105,
+				0.08395437896251678,
+				-0.04054110869765282
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":103,
+			"count":24,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
-			"componentType":5121,
-			"count":103,
-			"normalized":true,
-			"type":"VEC4"
+			"componentType":5123,
+			"count":36,
+			"type":"SCALAR"
 		},
 		{
 			"bufferView":3,
 			"componentType":5126,
-			"count":103,
+			"count":22,
+			"max":[
+				19.38004493713379,
+				1.8721489906311035,
+				-2.805858850479126
+			],
+			"min":[
+				18.38004493713379,
+				1.5257477760314941,
+				-3.805858850479126
+			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":4,
+			"componentType":5126,
+			"count":22,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":5,
+			"componentType":5126,
+			"count":22,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":6,
 			"componentType":5123,
-			"count":195,
+			"count":36,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":1236,
+			"byteLength":288,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1236,
-			"byteOffset":1236,
+			"byteLength":288,
+			"byteOffset":288,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":412,
-			"byteOffset":2472,
+			"byteLength":72,
+			"byteOffset":576,
+			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":264,
+			"byteOffset":648,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1236,
-			"byteOffset":2884,
+			"byteLength":264,
+			"byteOffset":912,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":390,
-			"byteOffset":4120,
+			"byteLength":176,
+			"byteOffset":1176,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":72,
+			"byteOffset":1352,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":4512,
+			"byteLength":1424,
 			"uri":"Barkapanacak.bin"
 		}
 	]
