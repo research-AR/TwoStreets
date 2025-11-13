@@ -203,6 +203,25 @@ document.addEventListener('DOMContentLoaded', () => {
             nextB.style.display = 'none';
         }
         
+        function deactivateFirstTargetContent() {
+            console.log('[Target 1] Deactivating current content.');
+            models.forEach((m, i) => {
+                if (m) {
+                    m.visible = false;
+                }
+                if (slotControllers[i]?.onLeave) {
+                    try {
+                        slotControllers[i].onLeave();
+                    } catch (err) {
+                        console.error(`[Target 1] Error during onLeave for slot ${i}:`, err);
+                    }
+                }
+            });
+            hideFirstTargetOccluders();
+            targetFound = false;
+            firstTargetCurrentlyTracked = false;
+        }
+
         function handleFirstTargetCompletion() {
             if (secondTargetPromptShown) return;
             secondTargetPromptShown = true;
@@ -211,6 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clearTimeout(secondTargetPromptDelayTimer);
             secondTargetPromptDelayTimer = setTimeout(() => {
                 awaitingSecondTarget = true;
+                deactivateFirstTargetContent();
                 showSecondTargetPrompt();
                 showSecondTargetArrow();
                 hideNavigationArrows();
@@ -1796,7 +1816,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 "./assets/DataModel11_3/Franz/Sahne2/binaacilacak2.gltf",                
                 "./assets/DataModel11_3/Franz/Sahne2/binaacilacak3.gltf",                
                 "./assets/DataModel11_3/Franz/Sahne2/binaacilacak4.gltf",                
-                "./assets/DataModel11_3/Franz/Sahne2/binaacilacak5.gltf",       
+                "./assets/DataModel11_3/Franz/Sahne2/binaacilacak5.gltf",   
+                "./assets/DataModel11_3/Franz/Sahne2/sayi2.gltf",  
+                "./assets/DataModel11_3/Franz/Sahne2/sayi3.gltf",  
+                "./assets/DataModel11_3/Franz/Sahne2/sayi4.gltf",  
+                "./assets/DataModel11_3/Franz/Sahne2/sayi5.gltf",  
+                "./assets/DataModel11_3/Franz/Sahne2/sayi6.gltf",  
                 "./assets/DataModel11_3/Franz/Sahne2/arkaplan.gltf",
                 "./assets/DataModel11_3/Franz/Sahne2/Simsek2ghost.gltf", 
                 "./assets/DataModel11_3/Franz/Sahne2/Simsek3.gltf", 
@@ -1822,11 +1847,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 "./assets/DataModel11_3/Franz/Sahne3/yazicevap.gltf",
             ], 
             [ 0, 0, 0, 0, 0, 0, 0,
-            1000, 1250, 1500, 1750, 2500, 2500, 2750, 3000, 3250, 3500, 4000, 4250, 4250, 4250, 4500, 4750, 5000,  
-            8000, 8250, 8500, 8750, 10000, 10000, 10000, 11883, 10000, 13000, 13000, 13250, 13500, 12750, 13500,
+            1000, 1250, 1500, 1750, 2500, 2500, 2750, 3000, 3250, 3500, 2500, 2750, 3000, 3250, 3500, 5000, 5250, 5250, 5250, 5500, 5750, 6000,  
+            9000, 9250, 9500, 9750, 11000, 11000, 11000, 12883, 11000, 14000, 14000, 14250, 14500, 13750, 14500,
             ],     // Timing
-            [10000, 0, 3000, 3250, 3500, 3750, 4000,
-            6000, 5750, 5500, 5250, 1750, 0, 0, 0, 0, 0, 3250, 2750, 0, 0, 0, 0, 0,
+            [11000, 0, 3000, 3250, 3500, 3750, 4000,
+            7000, 6750, 6500, 6250, 2750, 0, 0, 0, 0, 0, 250, 250, 250, 250, 0, 3000, 2750, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             ]);   
         }

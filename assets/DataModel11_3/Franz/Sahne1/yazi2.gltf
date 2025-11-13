@@ -15,7 +15,7 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Plane.042",
+			"name":"Text.083",
 			"rotation":[
 				0.7071068286895752,
 				0,
@@ -23,9 +23,14 @@
 				0.7071068286895752
 			],
 			"scale":[
-				0.5340216755867004,
+				4.310130596160889,
 				2.17391300201416,
-				0.02362949587404728
+				4.310131549835205
+			],
+			"translation":[
+				0,
+				0,
+				0.01604345254600048
 			]
 		}
 	],
@@ -47,7 +52,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.058",
+			"name":"Text.091",
 			"primitives":[
 				{
 					"attributes":{
@@ -65,67 +70,67 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":24,
+			"count":4742,
 			"max":[
-				-0.08118128776550293,
-				0.007300019264221191,
-				-1.5116511583328247
+				-0.015478279441595078,
+				0.0010000000474974513,
+				-0.02748059667646885
 			],
 			"min":[
-				-0.8505686521530151,
-				0.006840019021183252,
-				-1.9716511964797974
+				-0.06073492765426636,
+				-0.0010000000474974513,
+				-0.03690320625901222
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":24,
+			"count":4742,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":24,
+			"count":4742,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":36,
+			"count":14100,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":288,
+			"byteLength":56904,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":288,
-			"byteOffset":288,
+			"byteLength":56904,
+			"byteOffset":56904,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":192,
-			"byteOffset":576,
+			"byteLength":37936,
+			"byteOffset":113808,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":72,
-			"byteOffset":768,
+			"byteLength":28200,
+			"byteOffset":151744,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":840,
+			"byteLength":179944,
 			"uri":"yazi2.bin"
 		}
 	]

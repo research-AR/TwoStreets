@@ -8,45 +8,14 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				1,
-				2
+				0
 			]
 		}
 	],
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Simsek3.005",
-			"scale":[
-				1.409999966621399,
-				1.409999966621399,
-				1.409999966621399
-			],
-			"translation":[
-				304.347900390625,
-				366.4210510253906,
-				-16.848215103149414
-			]
-		},
-		{
-			"children":[
-				0
-			],
-			"name":"\u015fimsek",
-			"scale":[
-				0.0010000000474974513,
-				0.0010000000474974513,
-				0.0010000000474974513
-			],
-			"translation":[
-				-0.3043479323387146,
-				-0.36642104387283325,
-				0.016848217695951462
-			]
-		},
-		{
-			"mesh":1,
-			"name":"Text.064",
+			"name":"Plane.021",
 			"rotation":[
 				0.7071068286895752,
 				0,
@@ -54,32 +23,13 @@
 				0.7071068286895752
 			],
 			"scale":[
-				4.310130596160889,
+				1.05745267868042,
 				2.17391300201416,
-				4.310131549835205
-			],
-			"translation":[
-				0,
-				0,
-				0.01604345254600048
+				0.02362949587404728
 			]
 		}
 	],
 	"materials":[
-		{
-			"doubleSided":true,
-			"name":"PencereSolar.009",
-			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.9822452664375305,
-					0.38132646679878235,
-					0.0030353753827512264,
-					1
-				],
-				"metallicFactor":0,
-				"roughnessFactor":0.5
-			}
-		},
 		{
 			"doubleSided":true,
 			"name":"Material.002",
@@ -97,7 +47,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.051",
+			"name":"Plane.017",
 			"primitives":[
 				{
 					"attributes":{
@@ -109,145 +59,73 @@
 					"material":0
 				}
 			]
-		},
-		{
-			"name":"Text.001",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":4,
-						"NORMAL":5,
-						"TEXCOORD_0":6
-					},
-					"indices":7,
-					"material":1
-				}
-			]
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":52,
+			"count":24,
 			"max":[
-				-215.84085083007812,
-				-259.87310791015625,
-				11.956602096557617
+				0.043290719389915466,
+				0.007300019264221191,
+				-1.5116511583328247
 			],
 			"min":[
-				-215.8629150390625,
-				-259.912841796875,
-				11.948992729187012
+				-0.429543673992157,
+				0.006840019021183252,
+				-1.9716511964797974
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":52,
+			"count":24,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":52,
+			"count":24,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":96,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":4,
-			"componentType":5126,
-			"count":13798,
-			"max":[
-				0.00604837853461504,
-				0.0010000000474974513,
-				0.02546527609229088
-			],
-			"min":[
-				-0.10391954332590103,
-				-0.0010000000474974513,
-				0.015948910266160965
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":5,
-			"componentType":5126,
-			"count":13798,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":6,
-			"componentType":5126,
-			"count":13798,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":7,
-			"componentType":5123,
-			"count":41016,
+			"count":36,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":624,
+			"byteLength":288,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":624,
-			"byteOffset":624,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":416,
-			"byteOffset":1248,
+			"byteLength":288,
+			"byteOffset":288,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":192,
-			"byteOffset":1664,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":165576,
-			"byteOffset":1856,
+			"byteOffset":576,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":165576,
-			"byteOffset":167432,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":110384,
-			"byteOffset":333008,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":82032,
-			"byteOffset":443392,
+			"byteLength":72,
+			"byteOffset":768,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":525424,
+			"byteLength":840,
 			"uri":"yazi2.bin"
 		}
 	]

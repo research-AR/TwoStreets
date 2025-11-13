@@ -70,14 +70,14 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":10318,
+			"count":11792,
 			"max":[
-				-0.006805736105889082,
+				0.016230439767241478,
 				0.0010000000474974513,
-				-0.02738683857023716
+				-0.02738683670759201
 			],
 			"min":[
-				-0.10208188742399216,
+				-0.10391952842473984,
 				-0.0010000000474974513,
 				-0.03747512400150299
 			],
@@ -86,51 +86,51 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":10318,
+			"count":11792,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":10318,
+			"count":11792,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":30492,
+			"count":34848,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":123816,
+			"byteLength":141504,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":123816,
-			"byteOffset":123816,
+			"byteLength":141504,
+			"byteOffset":141504,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":82544,
-			"byteOffset":247632,
+			"byteLength":94336,
+			"byteOffset":283008,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":60984,
-			"byteOffset":330176,
+			"byteLength":69696,
+			"byteOffset":377344,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":391160,
+			"byteLength":447040,
 			"uri":"yazi1.bin"
 		}
 	]
