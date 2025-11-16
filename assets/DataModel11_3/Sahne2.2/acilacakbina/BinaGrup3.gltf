@@ -220,7 +220,7 @@
 						"NORMAL":4
 					},
 					"indices":5,
-					"material":1
+					"material":0
 				}
 			]
 		},
@@ -285,7 +285,7 @@
 						"NORMAL":19
 					},
 					"indices":5,
-					"material":1
+					"material":0
 				}
 			]
 		},
@@ -350,7 +350,7 @@
 						"NORMAL":32
 					},
 					"indices":5,
-					"material":1
+					"material":0
 				}
 			]
 		},
@@ -415,7 +415,7 @@
 						"NORMAL":43
 					},
 					"indices":5,
-					"material":1
+					"material":0
 				}
 			]
 		},
@@ -467,7 +467,7 @@
 						"NORMAL":53
 					},
 					"indices":5,
-					"material":1
+					"material":0
 				}
 			]
 		},
@@ -532,7 +532,7 @@
 						"NORMAL":66
 					},
 					"indices":5,
-					"material":1
+					"material":0
 				}
 			]
 		},

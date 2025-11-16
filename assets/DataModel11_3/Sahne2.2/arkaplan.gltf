@@ -15,7 +15,7 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Plane.024",
+			"name":"Plane.028",
 			"rotation":[
 				0.7071068286895752,
 				0,
@@ -48,7 +48,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.023",
+			"name":"Plane.030",
 			"primitives":[
 				{
 					"attributes":{
@@ -66,67 +66,67 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":7,
+			"count":4,
 			"max":[
-				0.6136709451675415,
-				5.271992176147933e-09,
-				0.39376628398895264
+				0.9213367104530334,
+				9.629420816281709e-09,
+				0.39376625418663025
 			],
 			"min":[
-				-0.9190011620521545,
-				-1.1715034275994185e-08,
-				0.10626626014709473
+				0.6139931678771973,
+				5.271990399791093e-09,
+				0.10626623779535294
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":7,
+			"count":4,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":7,
+			"count":4,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":15,
+			"count":6,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":84,
+			"byteLength":48,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":84,
-			"byteOffset":84,
+			"byteLength":48,
+			"byteOffset":48,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":56,
-			"byteOffset":168,
+			"byteLength":32,
+			"byteOffset":96,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":30,
-			"byteOffset":224,
+			"byteLength":12,
+			"byteOffset":128,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":256,
+			"byteLength":140,
 			"uri":"arkaplan.bin"
 		}
 	]

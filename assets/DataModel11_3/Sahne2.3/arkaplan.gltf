@@ -66,15 +66,15 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":8,
+			"count":4,
 			"max":[
-				0.921336829662323,
+				0.9213367104530334,
 				9.629420816281709e-09,
 				0.39376625418663025
 			],
 			"min":[
-				0.45966118574142456,
-				7.956752617888085e-11,
+				0.6139931678771973,
+				5.271990399791093e-09,
 				0.10626623779535294
 			],
 			"type":"VEC3"
@@ -82,51 +82,51 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":8,
+			"count":4,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":8,
+			"count":4,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":12,
+			"count":6,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":96,
+			"byteLength":48,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":96,
+			"byteLength":48,
+			"byteOffset":48,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":32,
 			"byteOffset":96,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":64,
-			"byteOffset":192,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":24,
-			"byteOffset":256,
+			"byteLength":12,
+			"byteOffset":128,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":280,
+			"byteLength":140,
 			"uri":"arkaplan.bin"
 		}
 	]

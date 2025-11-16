@@ -99,125 +99,125 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":2560,
+			"count":898,
 			"max":[
-				-0.06077244505286217,
+				-0.06106777861714363,
 				0.0010000000474974513,
-				0.04381684586405754
+				0.043779343366622925
 			],
 			"min":[
-				-0.07149827480316162,
+				-0.07151234894990921,
 				-0.0010000000474974513,
-				0.03677567467093468
+				0.036794424057006836
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":2560,
+			"count":898,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":2560,
+			"count":898,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":7656,
+			"count":2664,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":926,
+			"count":90,
 			"max":[
-				0.07149823755025864,
+				0.07171856611967087,
 				0.0010000000474974513,
 				0.04372308403253555
 			],
 			"min":[
-				0.06259129196405411,
+				0.06246471777558327,
 				-0.0010000000474974513,
-				0.03686942532658577
+				0.036878801882267
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":926,
+			"count":90,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":926,
+			"count":90,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":7,
 			"componentType":5123,
-			"count":2724,
+			"count":228,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":30720,
+			"byteLength":10776,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":30720,
-			"byteOffset":30720,
+			"byteLength":10776,
+			"byteOffset":10776,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":20480,
-			"byteOffset":61440,
+			"byteLength":7184,
+			"byteOffset":21552,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":15312,
-			"byteOffset":81920,
+			"byteLength":5328,
+			"byteOffset":28736,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":11112,
-			"byteOffset":97232,
+			"byteLength":1080,
+			"byteOffset":34064,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":11112,
-			"byteOffset":108344,
+			"byteLength":1080,
+			"byteOffset":35144,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":7408,
-			"byteOffset":119456,
+			"byteLength":720,
+			"byteOffset":36224,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5448,
-			"byteOffset":126864,
+			"byteLength":456,
+			"byteOffset":36944,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":132312,
+			"byteLength":37400,
 			"uri":"sayi9.bin"
 		}
 	]

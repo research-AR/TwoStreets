@@ -215,7 +215,7 @@
 						"NORMAL":4
 					},
 					"indices":5,
-					"material":1
+					"material":0
 				}
 			]
 		},
@@ -267,7 +267,7 @@
 						"NORMAL":16
 					},
 					"indices":5,
-					"material":1
+					"material":0
 				}
 			]
 		},
@@ -332,7 +332,7 @@
 						"NORMAL":30
 					},
 					"indices":5,
-					"material":1
+					"material":0
 				}
 			]
 		},
@@ -397,7 +397,7 @@
 						"NORMAL":42
 					},
 					"indices":5,
-					"material":1
+					"material":0
 				}
 			]
 		},
@@ -449,7 +449,7 @@
 						"NORMAL":52
 					},
 					"indices":5,
-					"material":1
+					"material":0
 				}
 			]
 		},
@@ -501,7 +501,7 @@
 						"NORMAL":62
 					},
 					"indices":5,
-					"material":1
+					"material":0
 				}
 			]
 		},
@@ -947,12 +947,12 @@
 			"componentType":5126,
 			"count":4,
 			"max":[
-				0.019565075635910034,
+				0.02499982714653015,
 				-0.9260869026184082,
 				0.05217394232749939
 			],
 			"min":[
-				0.013043344020843506,
+				0.018478095531463623,
 				-0.9402173757553101,
 				0.05217394232749939
 			],

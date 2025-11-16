@@ -9,22 +9,17 @@
 			"name":"Scene",
 			"nodes":[
 				0,
-				1,
-				2
+				1
 			]
 		}
 	],
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Pencere1.001"
-		},
-		{
-			"mesh":1,
 			"name":"Pencere13.005"
 		},
 		{
-			"mesh":2,
+			"mesh":1,
 			"name":"Pencere7.005"
 		}
 	],
@@ -46,7 +41,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Building_069_Mesh.001",
+			"name":"Building_071_Mesh.001",
 			"primitives":[
 				{
 					"attributes":{
@@ -59,7 +54,7 @@
 			]
 		},
 		{
-			"name":"Building_071_Mesh.001",
+			"name":"Building_081_Mesh.001",
 			"primitives":[
 				{
 					"attributes":{
@@ -70,52 +65,11 @@
 					"material":0
 				}
 			]
-		},
-		{
-			"name":"Building_081_Mesh.001",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":6,
-						"NORMAL":7
-					},
-					"indices":8,
-					"material":0
-				}
-			]
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
-			"componentType":5126,
-			"count":36,
-			"max":[
-				0.2771737575531006,
-				-0.893478274345398,
-				0.0423913300037384
-			],
-			"min":[
-				0.2554345726966858,
-				-0.936956524848938,
-				0.0423913300037384
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":1,
-			"componentType":5126,
-			"count":36,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":2,
-			"componentType":5123,
-			"count":54,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":3,
 			"componentType":5126,
 			"count":76,
 			"max":[
@@ -131,19 +85,19 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":4,
+			"bufferView":1,
 			"componentType":5126,
 			"count":76,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":5,
+			"bufferView":2,
 			"componentType":5123,
 			"count":114,
 			"type":"SCALAR"
 		},
 		{
-			"bufferView":6,
+			"bufferView":3,
 			"componentType":5126,
 			"count":38,
 			"max":[
@@ -159,13 +113,13 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":7,
+			"bufferView":4,
 			"componentType":5126,
 			"count":38,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":8,
+			"bufferView":5,
 			"componentType":5123,
 			"count":60,
 			"type":"SCALAR"
@@ -174,62 +128,44 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":432,
+			"byteLength":912,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":432,
-			"byteOffset":432,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":108,
-			"byteOffset":864,
-			"target":34963
-		},
-		{
-			"buffer":0,
 			"byteLength":912,
-			"byteOffset":972,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":912,
-			"byteOffset":1884,
+			"byteOffset":912,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":228,
-			"byteOffset":2796,
+			"byteOffset":1824,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":456,
-			"byteOffset":3024,
+			"byteOffset":2052,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":456,
-			"byteOffset":3480,
+			"byteOffset":2508,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":120,
-			"byteOffset":3936,
+			"byteOffset":2964,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":4056,
+			"byteLength":3084,
 			"uri":"Penceregrup1.bin"
 		}
 	]

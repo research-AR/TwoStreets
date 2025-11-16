@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const mindarThree = new MindARThree({
             container: arContainer,
-            imageTargetSrc: "./assets/targets/ikisokak.mind",
-            maxTrack: 2, // Allow tracking of 2 targets
+            imageTargetSrc: "./assets/targets/uclu.mind",
+            maxTrack: 3, // Allow tracking of 3 targets
             filterMinCF: 0.0001, // Lower value for better tracking
             filterBeta: 10,      // Higher value for more smoothing (was 1000, which is too high)
             warmupTolerance: 10, // More tolerance for warmup
@@ -53,6 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
         injectHUDStyles();
         const { hud, prevB, nextB, replayB, label } = createHUD(); // appended to <body>, hidden by default
         hud.hidden = true;
+        
+        // --- Info button (top right corner) ---
+        const { infoB } = createInfoButton();
+        
+        // --- Info modal ---
+        const { infoModal, infoContent, infoCloseBtn } = createInfoModal();
 
         // --- models list + helpers ---
         const TOTAL = 3; // Total number of AR scenes on first target
@@ -61,6 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let index = 0; // Current active scene index
         let lastActive = -1; // Previously active scene index
         let targetFound = false; // Track if target is currently found
+        
+        // --- Info text (shared for both targets) ---
+        const infoText = "Solar energy producing buildings were identified using 2023 satellite imagery.Estimates of solar energy production and consumption were derived from the Verbruiksgegevens per straat dataset published on the Fluvious Open Data Portal, the data calculated via the Zonnekaart platform (apps.energiesparen.be/zonnekaart), and satellite images. The resulting values are estimates and may differ from actual conditions.";
         
         // --- Second target system (middle target with 3 scenes, last one is guide) ---
         let secondTargetActive = false; // Track if second target is active
@@ -75,6 +84,20 @@ document.addEventListener('DOMContentLoaded', () => {
         let secondLastActive = -1; // Previously active scene on second target
         let secondTargetFound = false; // Track if second target is currently visible
         
+        // --- Third target system ---
+        let thirdTargetActive = false; // Track if third target is active
+        let thirdAnchor = null; // Third target anchor (created when second target completes)
+        let thirdAnchorInitialized = false; // Track if third anchor has been set up
+        
+        // Third target scenes
+        const THIRD_TOTAL = 1; // Total number of scenes on third target
+        const thirdModels = new Array(THIRD_TOTAL); // Array to store third target models
+        const thirdSlotControllers = new Array(THIRD_TOTAL); // Controllers for third target slots
+        let thirdIndex = 0; // Current active scene on third target
+        let thirdLastActive = -1; // Previously active scene on third target
+        let thirdTargetFound = false; // Track if third target is currently visible
+        let thirdSmoothed = null; // Smoothed group for third target
+        
         // --- Scene completion tracking ---
         let viewedScenes = new Set(); // Track which scenes have been viewed (from first target)
         let allScenesCompleted = false; // Track if all first target scenes are finished
@@ -86,11 +109,20 @@ document.addEventListener('DOMContentLoaded', () => {
         let secondTargetPromptDelayTimer = null;
         let awaitingSecondTarget = false;
         let firstTargetCurrentlyTracked = false;
+        
+        // Third target completion tracking
+        let secondTargetScenesCompleted = false; // Track if all second target scenes are finished
+        let thirdTargetPromptShown = false; // Ensure we only trigger the prompt once
+        let thirdTargetPromptElem = null;
+        let thirdTargetPromptTimer = null;
+        let thirdTargetPromptDelayTimer = null;
+        let awaitingThirdTarget = false;
 
         const loader = new GLTFLoader();
 
         const countLoaded = () => models.filter(Boolean).length;
         const secondCountLoaded = () => secondModels.filter(Boolean).length;
+        const thirdCountLoaded = () => thirdModels.filter(Boolean).length;
         
         function updateLabel() {
         // show current slot number if that slot is loaded; otherwise 0
@@ -144,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             content.innerHTML = `
                 <div style="font-size:18px; font-weight:700; margin-bottom:8px;">Move to the other sign</div>
-                <div style="font-size:15px;">Great! You've finished this part. Point your camera at the next marker to continue.</div>
+                <div style="font-size:15px;">Point your camera at the next sign to view the rest of the story.</div>
             `;
             prompt.appendChild(content);
             document.body.appendChild(prompt);
@@ -167,6 +199,63 @@ document.addEventListener('DOMContentLoaded', () => {
             secondTargetPromptTimer = setTimeout(() => {
                 if (secondTargetPromptElem) {
                     secondTargetPromptElem.style.display = 'none';
+                }
+            }, 300);
+        }
+        
+        // Third target prompt functions
+        function ensureThirdTargetPromptElement() {
+            if (thirdTargetPromptElem) return thirdTargetPromptElem;
+            const prompt = document.createElement('div');
+            prompt.id = 'third-target-prompt';
+            prompt.style.cssText = `
+                position: fixed;
+                inset: 0;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                z-index: 10001;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+                opacity: 0;
+            `;
+            const content = document.createElement('div');
+            content.style.cssText = `
+                max-width: min(320px, 80vw);
+                padding: 24px 28px;
+                border-radius: 20px;
+                background: rgba(25, 28, 36, 0.9);
+                color: #ffffff;
+                font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+                text-align: center;
+                line-height: 1.4;
+                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+                pointer-events: auto;
+            `;
+            content.innerHTML = `
+                <div style="font-size:18px; font-weight:700; margin-bottom:8px;">Turn in the direction the ground arrow points and aim your camera straight ahead.</div>
+            `;
+            prompt.appendChild(content);
+            document.body.appendChild(prompt);
+            thirdTargetPromptElem = prompt;
+            return prompt;
+        }
+        
+        function showThirdTargetPrompt() {
+            const prompt = ensureThirdTargetPromptElement();
+            prompt.style.display = 'flex';
+            requestAnimationFrame(() => { prompt.style.opacity = '1'; });
+        }
+        
+        function hideThirdTargetPrompt() {
+            if (!thirdTargetPromptElem) return;
+            thirdTargetPromptElem.style.opacity = '0';
+            clearTimeout(thirdTargetPromptDelayTimer);
+            thirdTargetPromptDelayTimer = null;
+            clearTimeout(thirdTargetPromptTimer);
+            thirdTargetPromptTimer = setTimeout(() => {
+                if (thirdTargetPromptElem) {
+                    thirdTargetPromptElem.style.display = 'none';
                 }
             }, 300);
         }
@@ -203,6 +292,29 @@ document.addEventListener('DOMContentLoaded', () => {
             nextB.style.display = 'none';
         }
         
+        function showInfoButton() {
+            infoB.style.display = '';
+        }
+        
+        function hideInfoButton() {
+            infoB.style.display = 'none';
+        }
+        
+        function showInfoModal() {
+            infoContent.textContent = infoText;
+            infoModal.style.display = 'flex';
+            requestAnimationFrame(() => {
+                infoModal.style.opacity = '1';
+            });
+        }
+        
+        function hideInfoModal() {
+            infoModal.style.opacity = '0';
+            setTimeout(() => {
+                infoModal.style.display = 'none';
+            }, 300);
+        }
+        
         function deactivateFirstTargetContent() {
             console.log('[Target 1] Deactivating current content.');
             models.forEach((m, i) => {
@@ -235,6 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showSecondTargetArrow();
                 hideNavigationArrows();
                 hideReplayButton();
+                hideInfoButton();
                 targetFound = false;
             }, 2000);
             if (!secondAnchorInitialized) {
@@ -344,14 +457,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Set up navigation button handlers for all targets
         const goPrev = () => {
-            if (secondTargetActive) {
+            if (thirdTargetActive) {
+                // Third target has only one scene, so prev does nothing
+                return;
+            } else if (secondTargetActive) {
                 secondShowDelta(-1);
             } else {
                 showDelta(-1);
             }
         };
         const goNext = () => {
-            if (secondTargetActive) {
+            if (thirdTargetActive) {
+                // Third target has only one scene, so next does nothing
+                return;
+            } else if (secondTargetActive) {
                 secondShowDelta(+1);
             } else {
                 // Check if on first target and all scenes completed
@@ -366,15 +485,38 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         const goReplay = () => {
-            if (secondTargetActive) {
+            if (thirdTargetActive) {
+                replayThirdTargetScene();
+            } else if (secondTargetActive) {
                 replaySecondTargetScene();
             } else {
                 replayCurrentScene();
             }
         };
+        
+        function replayThirdTargetScene() {
+            console.log(`Replaying third target scene ${thirdIndex}...`);
+            const controller = thirdSlotControllers[thirdIndex];
+            if (controller && controller.isComposite) {
+                controller.onLeave();
+                controller.onEnter();
+                console.log(`Third target scene ${thirdIndex} replay initiated`);
+            } else {
+                console.log(`Third target scene ${thirdIndex} is not a composite scene, no replay needed`);
+            }
+        }
         prevB.addEventListener('click', goPrev);
         nextB.addEventListener('click', goNext);
         replayB.addEventListener('click', goReplay);
+        infoB.addEventListener('click', showInfoModal);
+        infoCloseBtn.addEventListener('click', hideInfoModal);
+        
+        // Close modal when clicking outside
+        infoModal.addEventListener('click', (e) => {
+            if (e.target === infoModal) {
+                hideInfoModal();
+            }
+        });
         
         // Function to update navigation button states
         function updateNavigationButtons() {
@@ -409,28 +551,43 @@ document.addEventListener('DOMContentLoaded', () => {
             
             nextB.disabled = !canGoNext;
             nextB.style.opacity = canGoNext ? '1' : '0.5';
+            
+            // Update info button state (same logic as next button)
+            let canShowInfo = false;
+            if (currentSlot && currentSlot.isComposite) {
+                // For composite slots, check if all parts are visible
+                const allPartsVisible = currentSlot.areAllPartsVisible ? currentSlot.areAllPartsVisible() : true;
+                canShowInfo = allPartsVisible;
+            } else {
+                canShowInfo = true; // For regular slots, always allow info
+            }
+            
+            infoB.disabled = !canShowInfo;
+            infoB.style.opacity = canShowInfo ? '1' : '0.5';
         }
 
         // Show HUD only while target is tracked
         anchor.onTargetFound = () => { 
             firstTargetCurrentlyTracked = true;
             // CRITICAL: Only activate Target 1 if no other target is active
-            if (secondTargetActive) {
-                console.log('⚠️ Target 1 found but Target 2 is active - ignoring to prevent interference');
+            if (secondTargetActive || thirdTargetActive) {
+                console.log('⚠️ Target 1 found but another target is active - ignoring to prevent interference');
                 return; // Don't activate first target if another is active
             }
-            if (awaitingSecondTarget) {
-                console.log('⚠️ Target 1 found but we are awaiting the second target - ignoring.');
+            if (awaitingSecondTarget || awaitingThirdTarget) {
+                console.log('⚠️ Target 1 found but we are awaiting another target - ignoring.');
                 return;
             }
             
             console.log('🎯 Target 1 found! Activating...');
             hud.hidden = false; 
             showNavigationArrows();
-        showReplayButton();
+            showReplayButton();
+            showInfoButton();
             
             // Hide all other targets' models
             secondModels.forEach(m => { if (m) m.visible = false; });
+            thirdModels.forEach(m => { if (m) m.visible = false; });
             
             // Initialize smoothed group position on first detection to prevent initial snap
             if (!targetFound) {
@@ -1036,7 +1193,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // ============ LOAD COMPOSITE FOR SECOND TARGET ============
         // Similar to loadComposite but for second target scenes
-        function secondLoadComposite(slot, files, timing, hideAfter, { resetOnLeave=true, exclusive=false, resetOnEnter=true } = {}) {
+        function secondLoadComposite(slot, files, timing, hideAfter, { resetOnLeave=true, exclusive=false, resetOnEnter=true, onComplete=null } = {}) {
             console.log(`[Target 2] Loading composite slot ${slot} with ${files.length} files`);
             
             const group = new THREE.Group();
@@ -1204,9 +1361,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     if (result) {
                         console.log(`✅ [Target 2] Slot ${slot}: All permanent parts are visible! Navigation enabled.`);
+                        if (onComplete && !this.completed && this.started && allLoaded >= files.length) {
+                            this.completed = true;
+                            try {
+                                onComplete(slot);
+                            } catch (err) {
+                                console.error(`[Second Target Composite] onComplete callback for slot ${slot} failed:`, err);
+                            }
+                        }
                     }
                     return result;
-                }
+                },
+                completed: false
             };
 
             files.forEach((path, i) => {
@@ -1649,6 +1815,18 @@ document.addEventListener('DOMContentLoaded', () => {
             
             nextB.disabled = !canGoNext;
             nextB.style.opacity = canGoNext ? '1' : '0.5';
+            
+            // Update info button state for second target (same logic as next button)
+            let canShowInfo = false;
+            if (currentSlot && currentSlot.isComposite) {
+                const allPartsVisible = currentSlot.areAllPartsVisible ? currentSlot.areAllPartsVisible() : true;
+                canShowInfo = allPartsVisible;
+            } else {
+                canShowInfo = true; // For regular slots, always allow info
+            }
+            
+            infoB.disabled = !canShowInfo;
+            infoB.style.opacity = canShowInfo ? '1' : '0.5';
         }
 
         // ============ SECOND TARGET HANDLERS (Middle Target) ============
@@ -1681,8 +1859,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Set up event handlers for second target
         function setupSecondTargetHandlers() {
             secondAnchor.onTargetFound = () => {
-                if (firstTargetCurrentlyTracked) {
-                    console.log('Second target detected while first target is still in view. Ignoring to avoid overlap.');
+                if (firstTargetCurrentlyTracked || thirdTargetActive) {
+                    console.log('Second target detected while another target is active. Ignoring to avoid overlap.');
                     return;
                 }
                 // Only activate if first target scenes are completed
@@ -1700,6 +1878,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 hideSecondTargetArrow();
                 showNavigationArrows();
                 showReplayButton();
+                showInfoButton();
                 
                 // Hide all other targets' models
                 models.forEach(m => { if (m) m.visible = false; });
@@ -1783,8 +1962,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     hideNavigationArrows();
                     if (targetFound) {
                         showNavigationArrows();
+                        showInfoButton();
                     } else {
                         hideNavigationArrows();
+                        hideInfoButton();
                     }
                 awaitingSecondTarget = true;
                 }
@@ -1860,8 +2041,48 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 exclusive: false,
                 resetOnLeave: true,
-                resetOnEnter: true
+                resetOnEnter: true,
+                onComplete: handleSecondTargetCompletion
             });
+        }
+        
+        function handleSecondTargetCompletion() {
+            if (thirdTargetPromptShown) return;
+            thirdTargetPromptShown = true;
+            secondTargetScenesCompleted = true;
+            console.log('✅ All second target scenes complete. Prompting user to move to the third target.');
+            clearTimeout(thirdTargetPromptDelayTimer);
+            thirdTargetPromptDelayTimer = setTimeout(() => {
+                awaitingThirdTarget = true;
+                deactivateSecondTargetContent();
+                showThirdTargetPrompt();
+                hideNavigationArrows();
+                hideReplayButton();
+                hideInfoButton();
+                secondTargetFound = false;
+            }, 2000);
+            if (!thirdAnchorInitialized) {
+                initializeThirdAnchor();
+            }
+        }
+        
+        function deactivateSecondTargetContent() {
+            console.log('[Target 2] Deactivating current content.');
+            secondModels.forEach((m, i) => {
+                if (m) {
+                    m.visible = false;
+                }
+                if (secondSlotControllers[i]?.onLeave) {
+                    try {
+                        secondSlotControllers[i].onLeave();
+                    } catch (err) {
+                        console.error(`[Target 2] Error during onLeave for slot ${i}:`, err);
+                    }
+                }
+            });
+            hideSecondTargetOccluders();
+            secondTargetFound = false;
+            secondTargetActive = false;
         }
         
         // Show content for second target
@@ -1880,6 +2101,389 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Hiding second target content...');
             // Hide all second target models
             secondModels.forEach(m => { if (m) m.visible = false; });
+        }
+        
+        // ============ THIRD TARGET HANDLERS ============
+        // Initialize third anchor and its event handlers (created when needed)
+        function initializeThirdAnchor() {
+            if (thirdAnchorInitialized) return; // Already initialized
+            
+            console.log('Creating third anchor for tracking...');
+            thirdAnchor = mindarThree.addAnchor(2); // Create third target anchor (index 2)
+            thirdAnchorInitialized = true;
+            
+            // Create third smoothed group for third target (at scene level)
+            thirdSmoothed = new THREE.Group();
+            thirdSmoothed.name = 'third-smoothed-group';
+            thirdSmoothed.visible = true;
+            scene.add(thirdSmoothed);
+            console.log('[Target 3] Created thirdSmoothed group and added to scene');
+            
+            // Set up event handlers for third target
+            setupThirdTargetHandlers();
+            
+            // Load third target scenes
+            loadThirdTargetScenes();
+        }
+        
+        // Set up event handlers for third target
+        function setupThirdTargetHandlers() {
+            thirdAnchor.onTargetFound = () => {
+                if (firstTargetCurrentlyTracked || secondTargetActive) {
+                    console.log('Third target detected while another target is active. Ignoring to avoid overlap.');
+                    return;
+                }
+                // Only activate if second target scenes are completed
+                if (!secondTargetScenesCompleted) {
+                    console.log('Third target found but second target scenes not completed yet.');
+                    return;
+                }
+                
+                console.log('🎯 Third target found! Showing scene...');
+                hideThirdTargetPrompt();
+                showNavigationArrows();
+                showReplayButton();
+                showInfoButton();
+                
+                // Hide all other targets' models
+                models.forEach(m => { if (m) m.visible = false; });
+                secondModels.forEach(m => { if (m) m.visible = false; });
+                
+                // Hide other targets' occluders
+                hideFirstTargetOccluders();
+                hideSecondTargetOccluders();
+                
+                // Initialize third smoothed group position on first detection
+                if (!thirdTargetFound && thirdSmoothed) {
+                    thirdAnchor.group.getWorldPosition(thirdSmoothed.position);
+                    thirdAnchor.group.getWorldQuaternion(thirdSmoothed.quaternion);
+                    thirdAnchor.group.getWorldScale(thirdSmoothed.scale);
+                }
+                
+                thirdTargetActive = true;
+                thirdTargetFound = true;
+                awaitingThirdTarget = false;
+                hud.hidden = false;
+                thirdUpdateLabel();
+                thirdUpdateNavigationButtons();
+                
+                // Show content
+                showThirdTargetContent();
+                
+                // Trigger composite sequence if on composite slot
+                if (thirdSlotControllers[thirdIndex] && thirdSlotControllers[thirdIndex].isComposite) {
+                    console.log(`[Target 3] Attempting to start composite sequence for slot ${thirdIndex}`);
+                    thirdSlotControllers[thirdIndex].startSequenceIfReady();
+                }
+            };
+            
+            thirdAnchor.onTargetLost = () => {
+                if (thirdTargetActive) {
+                    console.log('⚠️ Third target tracking lost!');
+                    thirdTargetActive = false;
+                    thirdTargetFound = false;
+                    hideThirdTargetPrompt();
+                    if (!targetFound && !secondTargetFound) {
+                        hud.hidden = true;
+                    }
+                    hideThirdTargetContent();
+                }
+            };
+        }
+        
+        // Load third target scenes
+        function loadThirdTargetScenes() {
+            console.log('Loading third target scenes...');
+
+            // === PLACEHOLDER SCENES FOR THIRD TARGET ===
+            // Replace the file paths below with your actual GLTFs.
+            // Timing array: when each part appears (ms). HideAfter: 0 = stays visible.
+
+            // Scene 1 (index 0): simple two-part reveal
+            thirdLoadComposite(
+                0,
+                [
+                    "./assets/DataModel11_3/Bina/simsek1.gltf", 
+                    "./assets/DataModel11_3/Bina/simsekyazi.gltf", 
+                    "./assets/DataModel11_3/Bina/simsekhayalet.gltf", 
+                    "./assets/DataModel11_3/Bina/simsekhayaletyazi.gltf", 
+                    "./assets/DataModel11_3/Bina/isik1.gltf", 
+                    "./assets/DataModel11_3/Bina/isik2.gltf", 
+                    "./assets/DataModel11_3/Bina/isik3.gltf", 
+                    "./assets/DataModel11_3/Bina/isik4.gltf", 
+                    "./assets/DataModel11_3/Bina/isik5.gltf", 
+                    "./assets/DataModel11_3/Bina/isik6.gltf", 
+                    "./assets/DataModel11_3/Bina/isik7.gltf", 
+                    "./assets/DataModel11_3/Bina/isik8.gltf", 
+                    "./assets/DataModel11_3/Bina/isik9.gltf", 
+                    "./assets/DataModel11_3/Bina/isik10.gltf", 
+                    "./assets/DataModel11_3/Bina/isik11.gltf", 
+                    "./assets/DataModel11_3/Bina/isik12.gltf", 
+                    "./assets/DataModel11_3/Bina/isik13.gltf", 
+                    "./assets/DataModel11_3/Bina/isik14.gltf", 
+                    "./assets/DataModel11_3/Bina/isik15.gltf", 
+                    "./assets/DataModel11_3/Bina/isik16.gltf", 
+                    "./assets/DataModel11_3/Bina/yuzdeyazi.gltf", 
+
+                ],
+                [0, 0, 1500, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100,3100,],
+                [0, 1500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+                { resetOnLeave: true, resetOnEnter: true, exclusive: false }
+            );
+        }
+        
+        // Third target navigation functions
+        function thirdApplyVisibility() {
+            if (!thirdTargetActive) {
+                thirdModels.forEach(m => { if (m) m.visible = false; });
+                return;
+            }
+            models.forEach(m => { if (m) m.visible = false; });
+            secondModels.forEach(m => { if (m) m.visible = false; });
+            
+            thirdModels.forEach((m, i) => {
+                if (m) {
+                    m.visible = (i === thirdIndex);
+                }
+            });
+            
+            if (thirdLastActive !== thirdIndex) {
+                if (thirdLastActive >= 0 && thirdSlotControllers[thirdLastActive]?.onLeave) {
+                    thirdSlotControllers[thirdLastActive].onLeave();
+                }
+                if (thirdSlotControllers[thirdIndex]?.onEnter) {
+                    thirdSlotControllers[thirdIndex].onEnter();
+                }
+                thirdLastActive = thirdIndex;
+            }
+            
+            thirdUpdateLabel();
+            thirdUpdateNavigationButtons();
+        }
+        
+        function thirdUpdateLabel() {
+            label.textContent = `Target 3 - Scene ${thirdIndex + 1}/${THIRD_TOTAL}`;
+        }
+        
+        function thirdUpdateNavigationButtons() {
+            const currentSlot = thirdSlotControllers[thirdIndex];
+            const loadedCount = thirdCountLoaded();
+            
+            const canGoPrev = thirdIndex > 0;
+            prevB.disabled = !canGoPrev;
+            prevB.style.opacity = canGoPrev ? '1' : '0.5';
+            
+            let canGoNext = false;
+            if (currentSlot && currentSlot.isComposite) {
+                const allPartsVisible = currentSlot.areAllPartsVisible ? currentSlot.areAllPartsVisible() : true;
+                canGoNext = allPartsVisible && thirdIndex < loadedCount - 1;
+            } else {
+                canGoNext = thirdIndex < loadedCount - 1;
+            }
+            
+            nextB.disabled = !canGoNext;
+            nextB.style.opacity = canGoNext ? '1' : '0.5';
+            
+            // Update info button state
+            let canShowInfo = false;
+            if (currentSlot && currentSlot.isComposite) {
+                const allPartsVisible = currentSlot.areAllPartsVisible ? currentSlot.areAllPartsVisible() : true;
+                canShowInfo = allPartsVisible;
+            } else {
+                canShowInfo = true;
+            }
+            
+            infoB.disabled = !canShowInfo;
+            infoB.style.opacity = canShowInfo ? '1' : '0.5';
+        }
+        
+        function showThirdTargetContent() {
+            console.log('Displaying third target scenes...');
+            models.forEach(m => { if (m) m.visible = false; });
+            secondModels.forEach(m => { if (m) m.visible = false; });
+            thirdApplyVisibility();
+        }
+        
+        function hideThirdTargetContent() {
+            console.log('Hiding third target content...');
+            thirdModels.forEach(m => { if (m) m.visible = false; });
+        }
+        
+        // Third target register function
+        function thirdRegister(obj, slot) {
+            obj.visible = false;
+            if (thirdSmoothed) {
+                thirdSmoothed.add(obj);
+                console.log(`[Target 3] Registered model for slot ${slot}, added to thirdSmoothed.`);
+            } else {
+                console.error(`[Target 3] ERROR: thirdSmoothed does not exist when trying to register slot ${slot}!`);
+                scene.add(obj);
+            }
+            thirdModels[slot] = obj;
+            thirdApplyVisibility();
+        }
+        
+        // Third target load composite (similar to secondLoadComposite)
+        function thirdLoadComposite(slot, files, timing, hideAfter, { resetOnLeave=true, exclusive=false, resetOnEnter=true } = {}) {
+            console.log(`[Target 3] Loading composite slot ${slot} with ${files.length} files`);
+            
+            const group = new THREE.Group();
+            group.name = `third-composite-slot-${slot}`;
+            thirdRegister(group, slot);
+            
+            const parts = [];
+            let timers = [];
+            let allLoaded = 0;
+            
+            const clearTimers = () => { timers.forEach(id => clearTimeout(id)); timers = []; };
+            
+            function hidePart(i) {
+                const p = parts[i];
+                if (!p) return;
+                p.visible = false;
+                stopAnimationsForPart(p);
+                thirdUpdateNavigationButtons();
+            }
+            
+            function revealPart(i) {
+                if (exclusive) {
+                    parts.forEach((p, j) => {
+                        if (p) {
+                            p.visible = (j === i);
+                            if (j !== i) stopAnimationsForPart(p);
+                        }
+                    });
+                }
+                const p = parts[i];
+                if (!p) return;
+                p.visible = true;
+                startAnimationsForPart(p);
+                if (hideAfter && hideAfter[i] && hideAfter[i] > 0) {
+                    const hideTimer = setTimeout(() => hidePart(i), hideAfter[i]);
+                    timers.push(hideTimer);
+                }
+                thirdUpdateNavigationButtons();
+            }
+            
+            function startAnimationsForPart(part) {
+                const target = part;
+                const clips = (target.userData && Array.isArray(target.userData.clips)) ? target.userData.clips : [];
+                if (!clips.length) return;
+                const mixer = new THREE.AnimationMixer(target);
+                target.userData.mixers = target.userData.mixers || [];
+                target.userData.mixers.push(mixer);
+                clips.forEach((clip) => {
+                    const action = mixer.clipAction(clip);
+                    action.reset();
+                    action.setLoop(THREE.LoopOnce);
+                    action.clampWhenFinished = true;
+                    action.time = 0;
+                    action.enabled = true;
+                    action.setEffectiveWeight(1.0);
+                    action.fadeIn(0);
+                    action.play();
+                });
+            }
+            
+            function stopAnimationsForPart(part) {
+                part.traverse((child) => {
+                    if (child.userData.mixers) {
+                        child.userData.mixers.forEach(mixer => mixer.stopAllAction());
+                        child.userData.mixers = [];
+                    }
+                });
+            }
+            
+            function startSequence() {
+                if (thirdSlotControllers[slot].started) return;
+                if (allLoaded < files.length) return;
+                thirdSlotControllers[slot].started = true;
+                clearTimers();
+                const firstTime = (Array.isArray(timing) && timing.length > 0) ? (timing[0] || 0) : 0;
+                files.forEach((_, i) => {
+                    const absoluteTime = timing[i] || 0;
+                    const relativeTime = Math.max(0, absoluteTime - firstTime);
+                    const id = setTimeout(() => revealPart(i), relativeTime);
+                    timers.push(id);
+                });
+            }
+            
+            function hideAllParts() {
+                parts.forEach(p => {
+                    if (p) {
+                        p.visible = false;
+                        stopAnimationsForPart(p);
+                    }
+                });
+            }
+            
+            thirdSlotControllers[slot] = {
+                isComposite: true,
+                started: false,
+                onEnter() {
+                    models.forEach(m => { if (m) m.visible = false; });
+                    secondModels.forEach(m => { if (m) m.visible = false; });
+                    if (resetOnEnter) {
+                        clearTimers();
+                        hideAllParts();
+                        this.started = false;
+                    }
+                    if (thirdTargetFound && allLoaded >= files.length) {
+                        startSequence();
+                        this.started = true;
+                    }
+                },
+                onLeave() {
+                    clearTimers();
+                    if (resetOnLeave) { hideAllParts(); }
+                    this.started = false;
+                },
+                startSequenceIfReady() {
+                    if (thirdTargetFound && !this.started) {
+                        if (allLoaded >= files.length) {
+                            startSequence();
+                            this.started = true;
+                        }
+                    }
+                },
+                areAllPartsVisible() {
+                    if (files.length === 0) return true;
+                    const result = parts.every((part, i) => {
+                        if (!part) return true;
+                        if (hideAfter && hideAfter[i] && hideAfter[i] > 0) {
+                            return true;
+                        }
+                        return part.visible;
+                    });
+                    return result;
+                }
+            };
+            
+            files.forEach((path, i) => {
+                loader.load(
+                    path,
+                    (gltf) => {
+                        const root = gltf.scene;
+                        root.visible = false;
+                        root.position.set(0,0,0);
+                        root.rotation.set(0,0,0);
+                        root.userData = root.userData || {};
+                        root.userData.clips = Array.isArray(gltf.animations) ? gltf.animations : [];
+                        prepContent(root);
+                        group.add(root);
+                        parts[i] = root;
+                        allLoaded++;
+                        if (thirdModels[slot] === group && thirdIndex === slot && thirdTargetFound) {
+                            thirdSlotControllers[slot].startSequenceIfReady();
+                        }
+                    },
+                    undefined,
+                    (error) => {
+                        console.error(`[Third Target] Failed to load part ${i}: ${path}`, error);
+                        allLoaded++;
+                    }
+                );
+            });
         }
         
         // Show message when targets found but not ready
@@ -1976,6 +2580,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const secondAnchorWorldQuaternion = new THREE.Quaternion();
         const secondAnchorWorldScale = new THREE.Vector3();
         
+        const thirdAnchorWorldPosition = new THREE.Vector3();
+        const thirdAnchorWorldQuaternion = new THREE.Quaternion();
+        const thirdAnchorWorldScale = new THREE.Vector3();
+        
         renderer.setAnimationLoop(() => {
             const delta = Math.min(clock.getDelta(), 0.1); // Cap delta to prevent large jumps
             
@@ -2018,8 +2626,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             
+            // Apply constant smoothing to third target
+            if (thirdTargetFound && thirdSmoothed && thirdAnchor) {
+                // Extract world transform from third anchor
+                thirdAnchor.group.getWorldPosition(thirdAnchorWorldPosition);
+                thirdAnchor.group.getWorldQuaternion(thirdAnchorWorldQuaternion);
+                thirdAnchor.group.getWorldScale(thirdAnchorWorldScale);
+                
+                // Smoothly interpolate third smoothed group to match third anchor's world transform
+                thirdSmoothed.position.lerp(thirdAnchorWorldPosition, smoothingAlpha);
+                thirdSmoothed.quaternion.slerp(thirdAnchorWorldQuaternion, smoothingAlpha);
+                thirdSmoothed.scale.lerp(thirdAnchorWorldScale, smoothingAlpha);
+            }
+            
             // Update all animation mixers for second target
             secondModels.forEach(model => {
+                if (model && model.visible) { // Only update visible models
+                    model.traverse((child) => {
+                        if (child.userData.mixers) {
+                            child.userData.mixers.forEach(mixer => {
+                                mixer.update(delta);
+                            });
+                        }
+                    });
+                }
+            });
+            
+            // Update all animation mixers for third target
+            thirdModels.forEach(model => {
                 if (model && model.visible) { // Only update visible models
                     model.traverse((child) => {
                         if (child.userData.mixers) {
@@ -2071,6 +2705,125 @@ document.addEventListener('DOMContentLoaded', () => {
                 label: hud.querySelector('#label')
             };
         }
+        
+        function createInfoButton() {
+            const infoB = document.createElement('button');
+            infoB.id = 'info-btn';
+            infoB.className = 'info-btn';
+            infoB.setAttribute('aria-label', 'Information');
+            infoB.textContent = 'i';
+            infoB.style.display = 'none'; // Initially hidden
+            document.body.appendChild(infoB);
+            return { infoB };
+        }
+        
+        function createInfoModal() {
+            const modal = document.createElement('div');
+            modal.id = 'info-modal';
+            modal.style.cssText = `
+                position: fixed;
+                inset: 0;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+                opacity: 0;
+            `;
+            
+            // Container for close button and content
+            const container = document.createElement('div');
+            container.style.cssText = `
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                pointer-events: auto;
+            `;
+            
+            // Wrapper for close button to match content width (including padding)
+            const buttonWrapper = document.createElement('div');
+            buttonWrapper.style.cssText = `
+                max-width: min(400px, 85vw);
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+                margin-bottom: 12px;
+                padding-right: 0;
+                box-sizing: border-box;
+            `;
+            
+            // Close button - positioned above the content, aligned to right
+            const closeBtn = document.createElement('button');
+            closeBtn.id = 'info-close';
+            closeBtn.innerHTML = '×';
+            closeBtn.setAttribute('aria-label', 'Close');
+            closeBtn.style.cssText = `
+                width: 28px;
+                height: 28px;
+                border: 0;
+                border-radius: 50%;
+                padding: 0;
+                font-size: 20px;
+                font-weight: bold;
+                background: rgba(255,255,255,.92);
+                color: #333;
+                box-shadow: 0 6px 18px rgba(0,0,0,.25);
+                transition: opacity 0.3s ease, transform 0.2s ease, background 0.2s ease;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            
+            closeBtn.addEventListener('mouseenter', () => {
+                closeBtn.style.transform = 'scale(1.05)';
+                closeBtn.style.background = 'rgba(255,255,255,1)';
+            });
+            
+            closeBtn.addEventListener('mouseleave', () => {
+                closeBtn.style.transform = 'scale(1)';
+                closeBtn.style.background = 'rgba(255,255,255,.92)';
+            });
+            
+            closeBtn.addEventListener('mousedown', () => {
+                closeBtn.style.transform = 'scale(0.95)';
+            });
+            
+            closeBtn.addEventListener('mouseup', () => {
+                closeBtn.style.transform = 'scale(1.05)';
+            });
+            
+            const content = document.createElement('div');
+            content.id = 'info-content';
+            content.style.cssText = `
+                max-width: min(400px, 85vw);
+                max-height: min(60vh, 500px);
+                padding: 32px 28px;
+                border-radius: 16px;
+                background: rgba(255, 255, 255, 0.95);
+                color: #333;
+                font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+                font-size: 16px;
+                line-height: 1.6;
+                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+                overflow-y: auto;
+                box-sizing: border-box;
+            `;
+            
+            buttonWrapper.appendChild(closeBtn);
+            container.appendChild(buttonWrapper);
+            container.appendChild(content);
+            modal.appendChild(container);
+            document.body.appendChild(modal);
+            
+            return {
+                infoModal: modal,
+                infoContent: content,
+                infoCloseBtn: closeBtn
+            };
+        }
 
         function injectHUDStyles() {
             const css = `
@@ -2102,11 +2855,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 .hud .replay-btn {
                 font-size: 20px;
                 font-weight: bold;
-                background: rgba(52, 152, 219, 0.92);
-                color: white;
+                background: rgba(255,255,255,.92);
+                color: #333;
                 }
                 .hud .replay-btn:hover:not(:disabled) {
-                background: rgba(52, 152, 219, 1);
+                background: rgba(255,255,255,1);
                 }
                 .hud .arrow:disabled {
                 pointer-events: none;
@@ -2118,6 +2871,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 .hud .label {
                 pointer-events: none; color: #fff; font-weight: 700;
                 text-shadow: 0 2px 8px rgba(0,0,0,.6);
+                }
+                #info-btn {
+                position: fixed;
+                top: max(env(safe-area-inset-top), 16px);
+                right: max(env(safe-area-inset-right), 16px);
+                z-index: 9999;
+                pointer-events: auto;
+                border: 0;
+                border-radius: 50%;
+                width: 28px;
+                height: 28px;
+                padding: 0;
+                font-size: 16px;
+                font-weight: bold;
+                background: rgba(255,255,255,.92);
+                color: #333;
+                box-shadow: 0 6px 18px rgba(0,0,0,.25);
+                transition: opacity 0.3s ease, transform 0.2s ease, background 0.2s ease;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                }
+                #info-btn:hover:not(:disabled) {
+                transform: scale(1.05);
+                background: rgba(255,255,255,1);
+                }
+                #info-btn:active:not(:disabled) {
+                transform: scale(0.95);
+                }
+                #info-btn:disabled {
+                pointer-events: none;
+                cursor: not-allowed;
+                }
+                #info-btn:disabled:hover {
+                transform: none;
                 }
                 canvas { touch-action: none; } /* improves mobile pointer behavior */
             `;
