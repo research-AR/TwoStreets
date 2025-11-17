@@ -8,6 +8,7 @@
 		{
 			"name":"Scene",
 			"nodes":[
+				0,
 				1
 			]
 		}
@@ -15,57 +16,39 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Simsek3.001",
+			"name":"Simsek3.010",
 			"scale":[
-				1.409999966621399,
-				1.409999966621399,
-				1.409999966621399
-			],
-			"translation":[
-				0.388885498046875,
-				0.366424560546875,
-				-0.016845703125
+				2.4251999855041504,
+				2.4251999855041504,
+				2.4251999855041504
 			]
 		},
 		{
-			"children":[
-				0
-			],
-			"name":"Empty.003",
+			"mesh":1,
+			"name":"Simsek3.015",
 			"scale":[
-				0.0010000000474974513,
-				0.0010000000474974513,
-				0.0010000000474974513
-			],
-			"translation":[
-				-0.38892942667007446,
-				-0.36642104387283325,
-				0.016848217695951462
-			]
-		}
-	],
-	"animations":[
-		{
-			"channels":[
-				{
-					"sampler":0,
-					"target":{
-						"node":1,
-						"path":"scale"
-					}
-				}
-			],
-			"name":"Empty.003Action",
-			"samplers":[
-				{
-					"input":4,
-					"interpolation":"LINEAR",
-					"output":5
-				}
+				0.6626999974250793,
+				0.6626999974250793,
+				0.6626999974250793
 			]
 		}
 	],
 	"materials":[
+		{
+			"alphaMode":"BLEND",
+			"doubleSided":true,
+			"name":"Material.006",
+			"pbrMetallicRoughness":{
+				"baseColorFactor":[
+					0.9822452664375305,
+					0.38132646679878235,
+					0.0030353753827512264,
+					0.20000000298023224
+				],
+				"metallicFactor":0,
+				"roughnessFactor":0.5
+			}
+		},
 		{
 			"doubleSided":true,
 			"name":"PencereSolar.009",
@@ -83,7 +66,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.026",
+			"name":"Plane.074",
 			"primitives":[
 				{
 					"attributes":{
@@ -95,6 +78,20 @@
 					"material":0
 				}
 			]
+		},
+		{
+			"name":"Plane.008",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":4,
+						"NORMAL":5,
+						"TEXCOORD_0":6
+					},
+					"indices":3,
+					"material":1
+				}
+			]
 		}
 	],
 	"accessors":[
@@ -103,14 +100,14 @@
 			"componentType":5126,
 			"count":54,
 			"max":[
-				-0.26708656549453735,
-				-0.25987309217453003,
-				0.019557666033506393
+				-0.14811746776103973,
+				-0.16154485940933228,
+				0.014555774629116058
 			],
 			"min":[
-				-0.2891518175601959,
-				-0.2996285557746887,
-				0.011948966421186924
+				-0.1701827198266983,
+				-0.20130032300949097,
+				0.006947074551135302
 			],
 			"type":"VEC3"
 		},
@@ -135,20 +132,30 @@
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":61,
+			"count":54,
 			"max":[
-				2.5
+				-0.5653181076049805,
+				-0.591185450553894,
+				0.03303203731775284
 			],
 			"min":[
-				0
+				-0.5873833298683167,
+				-0.6309409141540527,
+				0.025423340499401093
 			],
-			"type":"SCALAR"
+			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":61,
+			"count":54,
 			"type":"VEC3"
+		},
+		{
+			"bufferView":6,
+			"componentType":5126,
+			"count":54,
+			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
@@ -178,18 +185,26 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":244,
-			"byteOffset":1920
+			"byteLength":648,
+			"byteOffset":1920,
+			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":732,
-			"byteOffset":2164
+			"byteLength":648,
+			"byteOffset":2568,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":432,
+			"byteOffset":3216,
+			"target":34962
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":2896,
+			"byteLength":3648,
 			"uri":"simsek1.bin"
 		}
 	]
