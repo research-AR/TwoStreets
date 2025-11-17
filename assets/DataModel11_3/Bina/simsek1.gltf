@@ -8,13 +8,39 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				1
+				1,
+				3
 			]
 		}
 	],
 	"nodes":[
 		{
 			"mesh":0,
+			"name":"Simsek1.3ghost.002",
+			"scale":[
+				1.3200000524520874,
+				1.3200000524520874,
+				1.3200000524520874
+			],
+			"translation":[
+				0.16088110208511353,
+				-0.3710707426071167,
+				-0.011288044042885303
+			]
+		},
+		{
+			"children":[
+				0
+			],
+			"name":"simsek.001",
+			"translation":[
+				-0.16088108718395233,
+				0.3710707128047943,
+				0.011288044042885303
+			]
+		},
+		{
+			"mesh":1,
 			"name":"Simsek1.3ghost",
 			"scale":[
 				1.2899999618530273,
@@ -29,9 +55,9 @@
 		},
 		{
 			"children":[
-				0
+				2
 			],
-			"name":"Empty",
+			"name":"simsek",
 			"translation":[
 				0.17558662593364716,
 				0.271510511636734,
@@ -50,12 +76,31 @@
 					}
 				}
 			],
+			"name":"EmptyAction.001",
+			"samplers":[
+				{
+					"input":8,
+					"interpolation":"LINEAR",
+					"output":9
+				}
+			]
+		},
+		{
+			"channels":[
+				{
+					"sampler":0,
+					"target":{
+						"node":3,
+						"path":"scale"
+					}
+				}
+			],
 			"name":"EmptyAction",
 			"samplers":[
 				{
-					"input":4,
+					"input":8,
 					"interpolation":"LINEAR",
-					"output":5
+					"output":10
 				}
 			]
 		}
@@ -78,7 +123,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.064",
+			"name":"Plane.027",
 			"primitives":[
 				{
 					"attributes":{
@@ -90,6 +135,20 @@
 					"material":0
 				}
 			]
+		},
+		{
+			"name":"Plane.064",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":4,
+						"NORMAL":5,
+						"TEXCOORD_0":6
+					},
+					"indices":7,
+					"material":0
+				}
+			]
 		}
 	],
 	"accessors":[
@@ -98,14 +157,14 @@
 			"componentType":5126,
 			"count":54,
 			"max":[
-				136.125,
-				210.4732666015625,
-				8.758030891418457
+				-0.11055111140012741,
+				0.2811141610145569,
+				0.01616024225950241
 			],
 			"min":[
-				136.10293579101562,
-				210.43350219726562,
-				8.750421524047852
+				-0.13261637091636658,
+				0.2413587123155594,
+				0.008551547303795815
 			],
 			"type":"VEC3"
 		},
@@ -130,6 +189,40 @@
 		{
 			"bufferView":4,
 			"componentType":5126,
+			"count":52,
+			"max":[
+				136.125,
+				210.4732666015625,
+				8.758030891418457
+			],
+			"min":[
+				136.10293579101562,
+				210.43350219726562,
+				8.750421524047852
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":5,
+			"componentType":5126,
+			"count":52,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":6,
+			"componentType":5126,
+			"count":52,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":7,
+			"componentType":5123,
+			"count":96,
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":8,
+			"componentType":5126,
 			"count":77,
 			"max":[
 				3.1666666666666665
@@ -140,7 +233,13 @@
 			"type":"SCALAR"
 		},
 		{
-			"bufferView":5,
+			"bufferView":9,
+			"componentType":5126,
+			"count":77,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":10,
 			"componentType":5126,
 			"count":77,
 			"type":"VEC3"
@@ -173,18 +272,47 @@
 		},
 		{
 			"buffer":0,
+			"byteLength":624,
+			"byteOffset":1920,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":624,
+			"byteOffset":2544,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":416,
+			"byteOffset":3168,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":192,
+			"byteOffset":3584,
+			"target":34963
+		},
+		{
+			"buffer":0,
 			"byteLength":308,
-			"byteOffset":1920
+			"byteOffset":3776
 		},
 		{
 			"buffer":0,
 			"byteLength":924,
-			"byteOffset":2228
+			"byteOffset":4084
+		},
+		{
+			"buffer":0,
+			"byteLength":924,
+			"byteOffset":5008
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":3152,
+			"byteLength":5932,
 			"uri":"simsek1.bin"
 		}
 	]

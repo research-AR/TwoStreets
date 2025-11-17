@@ -8,13 +8,23 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				0
+				0,
+				1
 			]
 		}
 	],
 	"nodes":[
 		{
 			"mesh":0,
+			"name":"Simsek1.3ghost.003",
+			"scale":[
+				1.3200000524520874,
+				1.3200000524520874,
+				1.3200000524520874
+			]
+		},
+		{
+			"mesh":1,
 			"name":"Simsek1.3ghost.001",
 			"scale":[
 				1.2899999618530273,
@@ -42,13 +52,27 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.025",
+			"name":"Plane.047",
 			"primitives":[
 				{
 					"attributes":{
 						"POSITION":0,
 						"NORMAL":1,
 						"TEXCOORD_0":2
+					},
+					"indices":3,
+					"material":0
+				}
+			]
+		},
+		{
+			"name":"Plane.025",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":4,
+						"NORMAL":5,
+						"TEXCOORD_0":6
 					},
 					"indices":3,
 					"material":0
@@ -62,14 +86,14 @@
 			"componentType":5126,
 			"count":54,
 			"max":[
-				0.14744219183921814,
-				0.21047340333461761,
-				0.01635911874473095
+				-0.11055109649896622,
+				0.2811141312122345,
+				0.01616024225950241
 			],
 			"min":[
-				0.12537693977355957,
-				0.17071793973445892,
-				0.008750422857701778
+				-0.13261635601520538,
+				0.241358682513237,
+				0.008551547303795815
 			],
 			"type":"VEC3"
 		},
@@ -90,6 +114,34 @@
 			"componentType":5123,
 			"count":96,
 			"type":"SCALAR"
+		},
+		{
+			"bufferView":4,
+			"componentType":5126,
+			"count":54,
+			"max":[
+				0.14744219183921814,
+				0.21047340333461761,
+				0.01635911874473095
+			],
+			"min":[
+				0.12537693977355957,
+				0.17071793973445892,
+				0.008750422857701778
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":5,
+			"componentType":5126,
+			"count":54,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":6,
+			"componentType":5126,
+			"count":54,
+			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
@@ -116,11 +168,29 @@
 			"byteLength":192,
 			"byteOffset":1728,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":648,
+			"byteOffset":1920,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":648,
+			"byteOffset":2568,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":432,
+			"byteOffset":3216,
+			"target":34962
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":1920,
+			"byteLength":3648,
 			"uri":"simsekhayalet.bin"
 		}
 	]

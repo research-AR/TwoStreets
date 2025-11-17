@@ -8,30 +8,19 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				0,
-				1
+				0
 			]
 		}
 	],
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Plane.032",
+			"name":"Plane.038",
 			"rotation":[
 				0.7071068286895752,
 				0,
 				0,
 				0.7071068286895752
-			]
-		},
-		{
-			"mesh":1,
-			"name":"Plane.008",
-			"rotation":[
-				0.5000000596046448,
-				-0.5,
-				-0.4999999403953552,
-				0.5
 			]
 		}
 	],
@@ -54,7 +43,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.037",
+			"name":"Plane.043",
 			"primitives":[
 				{
 					"attributes":{
@@ -66,20 +55,6 @@
 					"material":0
 				}
 			]
-		},
-		{
-			"name":"Plane.008",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":4,
-						"NORMAL":5,
-						"TEXCOORD_0":6
-					},
-					"indices":7,
-					"material":0
-				}
-			]
 		}
 	],
 	"accessors":[
@@ -88,14 +63,14 @@
 			"componentType":5126,
 			"count":6,
 			"max":[
-				-0.22277124226093292,
-				0.001000002259388566,
-				-0.09632696211338043
+				-0.10964533686637878,
+				0.0009999980684369802,
+				-0.19254948198795319
 			],
 			"min":[
-				-0.2739260196685791,
-				0.0010000005131587386,
-				-0.1375349462032318
+				-0.16080012917518616,
+				0.0009999963222071528,
+				-0.23375746607780457
 			],
 			"type":"VEC3"
 		},
@@ -115,40 +90,6 @@
 			"bufferView":3,
 			"componentType":5123,
 			"count":12,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":4,
-			"componentType":5126,
-			"count":11,
-			"max":[
-				-0.054232750087976456,
-				0.000999998883344233,
-				-0.19890421628952026
-			],
-			"min":[
-				-0.08423274755477905,
-				0.0009999974863603711,
-				-0.23588109016418457
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":5,
-			"componentType":5126,
-			"count":11,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":6,
-			"componentType":5126,
-			"count":11,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":7,
-			"componentType":5123,
-			"count":21,
 			"type":"SCALAR"
 		}
 	],
@@ -176,36 +117,12 @@
 			"byteLength":24,
 			"byteOffset":192,
 			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":132,
-			"byteOffset":216,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":132,
-			"byteOffset":348,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":88,
-			"byteOffset":480,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":42,
-			"byteOffset":568,
-			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":612,
-			"uri":"isik9.bin"
+			"byteLength":216,
+			"uri":"isik17.bin"
 		}
 	]
 }

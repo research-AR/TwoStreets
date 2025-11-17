@@ -15,11 +15,22 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"\u015fim\u015fek1",
+			"name":"simsekyazi.002",
+			"rotation":[
+				0.7071068286895752,
+				0,
+				0,
+				0.7071068286895752
+			],
 			"scale":[
-				2.0899999141693115,
-				2.0899999141693115,
-				2.0899999141693115
+				4.513979911804199,
+				2.276728630065918,
+				4.513980865478516
+			],
+			"translation":[
+				0,
+				0,
+				0.012805858626961708
 			]
 		}
 	],
@@ -41,7 +52,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Plane.082",
+			"name":"Text.003",
 			"primitives":[
 				{
 					"attributes":{
@@ -59,68 +70,68 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":54,
+			"count":3882,
 			"max":[
-				-0.17069777846336365,
-				-0.4876691699028015,
-				0.02063995786011219
+				-0.009518089704215527,
+				0.0010000000474974513,
+				0.002987990388646722
 			],
 			"min":[
-				-0.19276303052902222,
-				-0.5274246335029602,
-				0.013031264767050743
+				-0.03073536418378353,
+				-0.0010000000474974513,
+				-0.0041000619530677795
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":54,
+			"count":3882,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":54,
+			"count":3882,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":96,
+			"count":11580,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":648,
+			"byteLength":46584,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":648,
-			"byteOffset":648,
+			"byteLength":46584,
+			"byteOffset":46584,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":432,
-			"byteOffset":1296,
+			"byteLength":31056,
+			"byteOffset":93168,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":192,
-			"byteOffset":1728,
+			"byteLength":23160,
+			"byteOffset":124224,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":1920,
-			"uri":"Simsek1.bin"
+			"byteLength":147384,
+			"uri":"yuzdeyazi2.bin"
 		}
 	]
 }

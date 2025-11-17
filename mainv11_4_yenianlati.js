@@ -233,6 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 pointer-events: auto;
             `;
             content.innerHTML = `
+                <div style="font-size:18px; font-weight:700; margin-bottom:8px;">Turn to your right</div>
                 <div style="font-size:18px; font-weight:700; margin-bottom:8px;">Turn in the direction the ground arrow points and aim your camera straight ahead.</div>
             `;
             prompt.appendChild(content);
@@ -292,6 +293,22 @@ document.addEventListener('DOMContentLoaded', () => {
             nextB.style.display = 'none';
         }
         
+        function showPrevButton() {
+            prevB.style.display = '';
+        }
+        
+        function hidePrevButton() {
+            prevB.style.display = 'none';
+        }
+        
+        function showNextButton() {
+            nextB.style.display = '';
+        }
+        
+        function hideNextButton() {
+            nextB.style.display = 'none';
+        }
+        
         function showInfoButton() {
             infoB.style.display = '';
         }
@@ -345,8 +362,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 deactivateFirstTargetContent();
                 showSecondTargetPrompt();
                 showSecondTargetArrow();
-                hideNavigationArrows();
-                hideReplayButton();
+                // Hide next button (we're on last scene)
+                hideNextButton();
+                // Keep prev and replay buttons visible so users can navigate back or replay
+                showPrevButton();
+                // Keep replay button visible so users can replay the scene
+                // hideReplayButton();
                 hideInfoButton();
                 targetFound = false;
             }, 2000);
@@ -404,6 +425,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Show/hide models based on current scene and handle scene transitions
         function applyVisibility() {
             models.forEach((m, i) => { if (m) m.visible = (i === index); });
+            
+            // CRITICAL: Always ensure other targets' models are hidden when first target is active
+            if (targetFound && !secondTargetActive && !thirdTargetActive) {
+                secondModels.forEach(m => { if (m) m.visible = false; });
+                thirdModels.forEach(m => { if (m) m.visible = false; });
+            }
+            
             // fire leave/enter once per slot change
             if (lastActive !== index) {
                 if (lastActive >= 0 && slotControllers[lastActive]?.onLeave) {
@@ -443,6 +471,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Replay current scene function
         function replayCurrentScene() {
+            // If we're awaiting the next target, hide the prompt and reset the flag so it can appear again
+            if (awaitingSecondTarget) {
+                console.log('Replay clicked while awaiting second target - hiding prompt and replaying...');
+                hideSecondTargetPrompt();
+                hideSecondTargetArrow();
+                secondTargetPromptShown = false; // Reset flag so prompt can appear again after replay
+                clearTimeout(secondTargetPromptDelayTimer);
+                awaitingSecondTarget = false;
+                // Reactivate the content for replay
+                targetFound = true;
+                showFirstTargetOccluders();
+                // Show navigation buttons (prev button should be visible if not on first scene)
+                showNavigationArrows();
+                // Make sure the current scene is visible
+                applyVisibility();
+            }
+            
             console.log(`Replaying scene ${index}...`);
             const controller = slotControllers[index];
             if (controller && controller.isComposite) {
@@ -457,6 +502,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Set up navigation button handlers for all targets
         const goPrev = () => {
+            // If we're awaiting the next target, hide the prompt and allow navigation
+            if (awaitingSecondTarget) {
+                console.log('Prev clicked while awaiting second target - hiding prompt and navigating...');
+                hideSecondTargetPrompt();
+                hideSecondTargetArrow();
+                secondTargetPromptShown = false;
+                clearTimeout(secondTargetPromptDelayTimer);
+                awaitingSecondTarget = false;
+                targetFound = true;
+                showFirstTargetOccluders();
+                showNavigationArrows();
+            } else if (awaitingThirdTarget) {
+                console.log('Prev clicked while awaiting third target - hiding prompt and navigating...');
+                hideThirdTargetPrompt();
+                thirdTargetPromptShown = false;
+                clearTimeout(thirdTargetPromptDelayTimer);
+                awaitingThirdTarget = false;
+                secondTargetFound = true;
+                secondTargetActive = true;
+                showSecondTargetOccluders();
+                showNavigationArrows();
+            }
+            
             if (thirdTargetActive) {
                 // Third target has only one scene, so prev does nothing
                 return;
@@ -485,7 +553,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         const goReplay = () => {
-            if (thirdTargetActive) {
+            // Check if we're awaiting a target (prompt is showing) - handle replay for that target
+            if (awaitingThirdTarget) {
+                // We're on second target's last scene with prompt showing
+                replaySecondTargetScene();
+            } else if (awaitingSecondTarget) {
+                // We're on first target's last scene with prompt showing
+                replayCurrentScene();
+            } else if (thirdTargetActive) {
                 replayThirdTargetScene();
             } else if (secondTargetActive) {
                 replaySecondTargetScene();
@@ -523,34 +598,54 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentSlot = slotControllers[index];
             const loadedCount = countLoaded();
             
-            // Check if we can go to previous scene
-            const canGoPrev = index > 0;
-            prevB.disabled = !canGoPrev;
-            prevB.style.opacity = canGoPrev ? '1' : '0.5';
-            
-            // Check if we can go to next scene
-            let canGoNext = false;
-            if (currentSlot && currentSlot.isComposite) {
-                // For composite slots, check if all parts are visible
-                const allPartsVisible = currentSlot.areAllPartsVisible ? currentSlot.areAllPartsVisible() : true;
-                canGoNext = allPartsVisible && index < loadedCount - 1;
-                
-                // Special case: if on last scene (index 2) and all scenes completed, enable next to go to second target
-                if (index === TOTAL - 1 && allScenesCompleted && allPartsVisible) {
-                    canGoNext = true; // Enable to initialize second target
-                }
-            } else {
-                // For regular slots, just check if there's a next scene
-                canGoNext = index < loadedCount - 1;
-                
-                // Special case: if on last scene and all completed, enable next to go to second target
-                if (index === TOTAL - 1 && allScenesCompleted) {
-                    canGoNext = true; // Enable to initialize second target
-                }
+            // If only one scene, only show replay button
+            if (TOTAL === 1) {
+                hidePrevButton();
+                hideNextButton();
+                return;
             }
             
-            nextB.disabled = !canGoNext;
-            nextB.style.opacity = canGoNext ? '1' : '0.5';
+            // Check if we can go to previous scene
+            const canGoPrev = index > 0;
+            if (canGoPrev) {
+                showPrevButton();
+                prevB.disabled = false;
+                prevB.style.opacity = '1';
+            } else {
+                hidePrevButton();
+            }
+            
+            // Check if there's a next scene available
+            const hasNextScene = index < loadedCount - 1;
+            
+            // Check if current scene is completed (all parts visible for composite scenes)
+            let sceneCompleted = false;
+            if (currentSlot && currentSlot.isComposite) {
+                sceneCompleted = currentSlot.areAllPartsVisible ? currentSlot.areAllPartsVisible() : true;
+            } else {
+                sceneCompleted = true; // For regular slots, consider completed immediately
+            }
+            
+            // Handle next button visibility and state
+            if (index === TOTAL - 1 && !allScenesCompleted) {
+                // On last scene and not all scenes completed - hide next button
+                hideNextButton();
+            } else if (hasNextScene) {
+                // There's a next scene - always show next button
+                showNextButton();
+                if (sceneCompleted) {
+                    // Scene completed - active next button
+                    nextB.disabled = false;
+                    nextB.style.opacity = '1';
+                } else {
+                    // Scene not completed - inactive next button at 50% opacity
+                    nextB.disabled = true;
+                    nextB.style.opacity = '0.5';
+                }
+            } else {
+                // No next scene - hide next button
+                hideNextButton();
+            }
             
             // Update info button state (same logic as next button)
             let canShowInfo = false;
@@ -1311,6 +1406,7 @@ document.addEventListener('DOMContentLoaded', () => {
             secondSlotControllers[slot] = {
                 isComposite: true,
                 started: false,
+                completed: false,
                 
                 onEnter() {
                     console.log(`[Target 2] Scene ${slot} onEnter - ${files.length} files, allLoaded: ${allLoaded}`);
@@ -1321,6 +1417,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         clearTimers();
                         hideAllParts();
                         this.started = false;
+                        this.completed = false; // Reset completed flag so onComplete can be called again on replay
                     }
                     
                     if (secondTargetFound && allLoaded >= files.length) {
@@ -1477,7 +1574,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "./assets/DataModel11_3/Sahne1.4/Pencere2.gltf",                   
 
         ],  [0, 0, 0, 0,
-            2000, 2250, 2500, 2750,
+            1000, 1250, 1500, 1750,
             3000, 4000, 4000,
             4000, 4250, 4500, 4750, 5000, 5250,
             6000, 6500, 8500, 8833,
@@ -1586,7 +1683,7 @@ document.addEventListener('DOMContentLoaded', () => {
             7000,7000, //kullanılan enerji
             7000, 7250, 7500, 7750, 8000, 8250, 8500, 8750, 9000, 9250,//mevcutpencere
             10000, 10250, 12250, 12500,
-            10500, 14000, 14000,
+            10500, 13000, 13000,
             13000, 13000, 13250, 13500, 13750, 14000,
         ], 
         
@@ -1601,7 +1698,7 @@ document.addEventListener('DOMContentLoaded', () => {
             3500, 3500,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0,
-            3500, 0, 0,
+            2500, 0, 0,
             0, 0, 0, 0, 0, 0,
         ], {
 
@@ -1779,6 +1876,23 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Replay current second target scene function
         function replaySecondTargetScene() {
+            // If we're awaiting the third target, hide the prompt and reset the flag so it can appear again
+            if (awaitingThirdTarget) {
+                console.log('Replay clicked while awaiting third target - hiding prompt and replaying...');
+                hideThirdTargetPrompt();
+                thirdTargetPromptShown = false; // Reset flag so prompt can appear again after replay
+                clearTimeout(thirdTargetPromptDelayTimer);
+                awaitingThirdTarget = false;
+                // Reactivate the content for replay
+                secondTargetFound = true;
+                secondTargetActive = true;
+                showSecondTargetOccluders();
+                // Show navigation buttons (prev button should be visible if not on first scene)
+                showNavigationArrows();
+                // Make sure the current scene is visible
+                secondApplyVisibility();
+            }
+            
             console.log(`Replaying second target scene ${secondIndex}...`);
             const controller = secondSlotControllers[secondIndex];
             if (controller && controller.isComposite) {
@@ -1799,22 +1913,54 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentSlot = secondSlotControllers[secondIndex];
             const loadedCount = secondCountLoaded();
             
-            // Check if we can go to previous scene
-            const canGoPrev = secondIndex > 0;
-            prevB.disabled = !canGoPrev;
-            prevB.style.opacity = canGoPrev ? '1' : '0.5';
-            
-            // Check if we can go to next scene
-            let canGoNext = false;
-            if (currentSlot && currentSlot.isComposite) {
-                const allPartsVisible = currentSlot.areAllPartsVisible ? currentSlot.areAllPartsVisible() : true;
-                canGoNext = allPartsVisible && secondIndex < loadedCount - 1;
-            } else {
-                canGoNext = secondIndex < loadedCount - 1;
+            // If only one scene, only show replay button
+            if (SECOND_TOTAL === 1) {
+                hidePrevButton();
+                hideNextButton();
+                return;
             }
             
-            nextB.disabled = !canGoNext;
-            nextB.style.opacity = canGoNext ? '1' : '0.5';
+            // Check if we can go to previous scene
+            const canGoPrev = secondIndex > 0;
+            if (canGoPrev) {
+                showPrevButton();
+                prevB.disabled = false;
+                prevB.style.opacity = '1';
+            } else {
+                hidePrevButton();
+            }
+            
+            // Check if there's a next scene available
+            const hasNextScene = secondIndex < loadedCount - 1;
+            
+            // Check if current scene is completed (all parts visible for composite scenes)
+            let sceneCompleted = false;
+            if (currentSlot && currentSlot.isComposite) {
+                sceneCompleted = currentSlot.areAllPartsVisible ? currentSlot.areAllPartsVisible() : true;
+            } else {
+                sceneCompleted = true; // For regular slots, consider completed immediately
+            }
+            
+            // Handle next button visibility and state
+            if (secondIndex === SECOND_TOTAL - 1) {
+                // On last scene - hide next button
+                hideNextButton();
+            } else if (hasNextScene) {
+                // There's a next scene - always show next button
+                showNextButton();
+                if (sceneCompleted) {
+                    // Scene completed - active next button
+                    nextB.disabled = false;
+                    nextB.style.opacity = '1';
+                } else {
+                    // Scene not completed - inactive next button at 50% opacity
+                    nextB.disabled = true;
+                    nextB.style.opacity = '0.5';
+                }
+            } else {
+                // No next scene - hide next button
+                hideNextButton();
+            }
             
             // Update info button state for second target (same logic as next button)
             let canShowInfo = false;
@@ -1993,12 +2139,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 "./assets/DataModel11_3/Franz/Sahne1/isiksurplus2.gltf",
                 "./assets/DataModel11_3/Franz/Sahne1/isiksurplus3.gltf",
                 "./assets/DataModel11_3/Franz/Sahne1/isiksurplus4.gltf",
-                "./assets/DataModel11_3/Franz/Sahne1/isiksurplus5.gltf",      
+                "./assets/DataModel11_3/Franz/Sahne1/isiksurplus5.gltf",     
+                
+                "./assets/DataModel11_3/Franz/Sahne1/yazison1.gltf", 
+                "./assets/DataModel11_3/Franz/Sahne1/yazison2.gltf", 
+
                 
 
             ], 
-            [0, 0, 250, 250, 250, 2133, 250, 3250, 3250, 3500, 3750, 4000, 4250, 4500,],     // Timing
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]);   
+            [0, 0, 250, 250, 250, 2133, 250, 3250, 3250, 3500, 3750, 4000, 4250, 4500, 5250, 5500,],     // Timing
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]);   
 
             // Second Target Scene 2 - Follow-up composite scene
             secondLoadComposite(1, [
@@ -2056,8 +2206,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 awaitingThirdTarget = true;
                 deactivateSecondTargetContent();
                 showThirdTargetPrompt();
-                hideNavigationArrows();
-                hideReplayButton();
+                // Hide next button (we're on last scene)
+                hideNextButton();
+                // Keep prev and replay buttons visible so users can navigate back or replay
+                showPrevButton();
+                // Keep replay button visible so users can replay the scene
+                // hideReplayButton();
                 hideInfoButton();
                 secondTargetFound = false;
             }, 2000);
@@ -2204,9 +2358,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 0,
                 [
                     "./assets/DataModel11_3/Bina/simsek1.gltf", 
-                    "./assets/DataModel11_3/Bina/simsekyazi.gltf", 
                     "./assets/DataModel11_3/Bina/simsekhayalet.gltf", 
-                    "./assets/DataModel11_3/Bina/simsekhayaletyazi.gltf", 
                     "./assets/DataModel11_3/Bina/isik1.gltf", 
                     "./assets/DataModel11_3/Bina/isik2.gltf", 
                     "./assets/DataModel11_3/Bina/isik3.gltf", 
@@ -2223,11 +2375,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     "./assets/DataModel11_3/Bina/isik14.gltf", 
                     "./assets/DataModel11_3/Bina/isik15.gltf", 
                     "./assets/DataModel11_3/Bina/isik16.gltf", 
-                    "./assets/DataModel11_3/Bina/yuzdeyazi.gltf", 
+                    "./assets/DataModel11_3/Bina/isik17.gltf", 
+                    "./assets/DataModel11_3/Bina/yuzdeyazi1.gltf", 
+                    "./assets/DataModel11_3/Bina/yuzdeyazi2.gltf", 
 
                 ],
-                [0, 0, 1500, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100,3100,],
-                [0, 1500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+                [0, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200, 3100, 3200,],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
                 { resetOnLeave: true, resetOnEnter: true, exclusive: false }
             );
         }
@@ -2269,20 +2423,53 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentSlot = thirdSlotControllers[thirdIndex];
             const loadedCount = thirdCountLoaded();
             
-            const canGoPrev = thirdIndex > 0;
-            prevB.disabled = !canGoPrev;
-            prevB.style.opacity = canGoPrev ? '1' : '0.5';
-            
-            let canGoNext = false;
-            if (currentSlot && currentSlot.isComposite) {
-                const allPartsVisible = currentSlot.areAllPartsVisible ? currentSlot.areAllPartsVisible() : true;
-                canGoNext = allPartsVisible && thirdIndex < loadedCount - 1;
-            } else {
-                canGoNext = thirdIndex < loadedCount - 1;
+            // If only one scene, only show replay button
+            if (THIRD_TOTAL === 1) {
+                hidePrevButton();
+                hideNextButton();
+                return;
             }
             
-            nextB.disabled = !canGoNext;
-            nextB.style.opacity = canGoNext ? '1' : '0.5';
+            const canGoPrev = thirdIndex > 0;
+            if (canGoPrev) {
+                showPrevButton();
+                prevB.disabled = false;
+                prevB.style.opacity = '1';
+            } else {
+                hidePrevButton();
+            }
+            
+            // Check if there's a next scene available
+            const hasNextScene = thirdIndex < loadedCount - 1;
+            
+            // Check if current scene is completed (all parts visible for composite scenes)
+            let sceneCompleted = false;
+            if (currentSlot && currentSlot.isComposite) {
+                sceneCompleted = currentSlot.areAllPartsVisible ? currentSlot.areAllPartsVisible() : true;
+            } else {
+                sceneCompleted = true; // For regular slots, consider completed immediately
+            }
+            
+            // Handle next button visibility and state
+            if (thirdIndex === THIRD_TOTAL - 1) {
+                // On last scene - hide next button
+                hideNextButton();
+            } else if (hasNextScene) {
+                // There's a next scene - always show next button
+                showNextButton();
+                if (sceneCompleted) {
+                    // Scene completed - active next button
+                    nextB.disabled = false;
+                    nextB.style.opacity = '1';
+                } else {
+                    // Scene not completed - inactive next button at 50% opacity
+                    nextB.disabled = true;
+                    nextB.style.opacity = '0.5';
+                }
+            } else {
+                // No next scene - hide next button
+                hideNextButton();
+            }
             
             // Update info button state
             let canShowInfo = false;
@@ -2570,6 +2757,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Lower value = smoother but slightly more lag
         // Higher value = more responsive but more jitter
         const smoothingAlpha = 0.08; // Optimized balance: minimal jitter with acceptable lag
+        const thirdSmoothingAlpha = 0.06; // Slightly stronger smoothing for real-scene third target
         
         // Helper matrices and vectors for world transform extraction
         const anchorWorldPosition = new THREE.Vector3();
@@ -2589,6 +2777,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Apply constant smoothing to first target
             if (targetFound) {
+                // CRITICAL: Ensure other targets' models are always hidden when first target is active
+                if (!secondTargetActive && !thirdTargetActive) {
+                    secondModels.forEach(m => { if (m) m.visible = false; });
+                    thirdModels.forEach(m => { if (m) m.visible = false; });
+                }
+                
                 // Extract world transform from anchor
                 anchor.group.getWorldPosition(anchorWorldPosition);
                 anchor.group.getWorldQuaternion(anchorWorldQuaternion);
@@ -2601,7 +2795,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             // Apply constant smoothing to second target (middle target)
-            if (secondTargetFound && secondSmoothed && secondAnchor) {
+            // Only update if second target is actually active
+            if (secondTargetActive && secondTargetFound && secondSmoothed && secondAnchor) {
                 // Extract world transform from second anchor
                 secondAnchor.group.getWorldPosition(secondAnchorWorldPosition);
                 secondAnchor.group.getWorldQuaternion(secondAnchorWorldQuaternion);
@@ -2627,43 +2822,56 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             // Apply constant smoothing to third target
-            if (thirdTargetFound && thirdSmoothed && thirdAnchor) {
+            // Only update if third target is actually active
+            if (thirdTargetActive && thirdTargetFound && thirdSmoothed && thirdAnchor) {
                 // Extract world transform from third anchor
                 thirdAnchor.group.getWorldPosition(thirdAnchorWorldPosition);
                 thirdAnchor.group.getWorldQuaternion(thirdAnchorWorldQuaternion);
                 thirdAnchor.group.getWorldScale(thirdAnchorWorldScale);
                 
                 // Smoothly interpolate third smoothed group to match third anchor's world transform
-                thirdSmoothed.position.lerp(thirdAnchorWorldPosition, smoothingAlpha);
-                thirdSmoothed.quaternion.slerp(thirdAnchorWorldQuaternion, smoothingAlpha);
-                thirdSmoothed.scale.lerp(thirdAnchorWorldScale, smoothingAlpha);
+                thirdSmoothed.position.lerp(thirdAnchorWorldPosition, thirdSmoothingAlpha);
+                thirdSmoothed.quaternion.slerp(thirdAnchorWorldQuaternion, thirdSmoothingAlpha);
+                thirdSmoothed.scale.lerp(thirdAnchorWorldScale, thirdSmoothingAlpha);
             }
             
             // Update all animation mixers for second target
-            secondModels.forEach(model => {
-                if (model && model.visible) { // Only update visible models
-                    model.traverse((child) => {
-                        if (child.userData.mixers) {
-                            child.userData.mixers.forEach(mixer => {
-                                mixer.update(delta);
-                            });
-                        }
-                    });
-                }
-            });
+            // Only update if second target is actually active
+            if (secondTargetActive && secondTargetFound) {
+                secondModels.forEach(model => {
+                    if (model && model.visible) { // Only update visible models
+                        model.traverse((child) => {
+                            if (child.userData.mixers) {
+                                child.userData.mixers.forEach(mixer => {
+                                    mixer.update(delta);
+                                });
+                            }
+                        });
+                    }
+                });
+            } else {
+                // Ensure second target models are hidden if second target is not active
+                secondModels.forEach(m => { if (m) m.visible = false; });
+            }
             
             // Update all animation mixers for third target
-            thirdModels.forEach(model => {
-                if (model && model.visible) { // Only update visible models
-                    model.traverse((child) => {
-                        if (child.userData.mixers) {
-                            child.userData.mixers.forEach(mixer => {
-                                mixer.update(delta);
-                            });
-                        }
-                    });
-                }
-            });
+            // Only update if third target is actually active
+            if (thirdTargetActive && thirdTargetFound) {
+                thirdModels.forEach(model => {
+                    if (model && model.visible) { // Only update visible models
+                        model.traverse((child) => {
+                            if (child.userData.mixers) {
+                                child.userData.mixers.forEach(mixer => {
+                                    mixer.update(delta);
+                                });
+                            }
+                        });
+                    }
+                });
+            } else {
+                // Ensure third target models are hidden if third target is not active
+                thirdModels.forEach(m => { if (m) m.visible = false; });
+            }
             
             renderer.render(scene, camera);
         });
