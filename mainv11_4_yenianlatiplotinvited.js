@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         function updateLabel() {
         // show current slot number if that slot is loaded; otherwise 0
-                label.textContent = `${models[index] ? index + 1 : 0}/${TOTAL}`;
+                label.textContent = `Part 1 ${models[index] ? index + 1 : 0}/${TOTAL}`;
         }
         
         // Track scene viewing and check for completion
@@ -1906,7 +1906,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         function secondUpdateLabel() {
-            label.textContent = `${secondIndex + 1}/${SECOND_TOTAL}`;
+            label.textContent = `Part 2 ${secondIndex + 1}/${SECOND_TOTAL}`;
         }
         
         function secondUpdateNavigationButtons() {
@@ -2435,7 +2435,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         function thirdUpdateLabel() {
-            label.textContent = `${thirdIndex + 1}/${THIRD_TOTAL}`;
+            label.textContent = `Part 3 ${thirdIndex + 1}/${THIRD_TOTAL}`;
         }
         
         function thirdUpdateNavigationButtons() {
