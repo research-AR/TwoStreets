@@ -1906,7 +1906,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         function secondUpdateLabel() {
-            label.textContent = `Target 2 - Scene ${secondIndex + 1}/${SECOND_TOTAL}`;
+            label.textContent = `${secondIndex + 1}/${SECOND_TOTAL}`;
         }
         
         function secondUpdateNavigationButtons() {
@@ -2435,7 +2435,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         function thirdUpdateLabel() {
-            label.textContent = `Target 3 - Scene ${thirdIndex + 1}/${THIRD_TOTAL}`;
+            label.textContent = `${thirdIndex + 1}/${THIRD_TOTAL}`;
         }
         
         function thirdUpdateNavigationButtons() {
