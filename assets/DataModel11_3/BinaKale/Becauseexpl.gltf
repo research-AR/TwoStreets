@@ -70,7 +70,7 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":37501,
+			"count":38903,
 			"max":[
 				0.11444468051195145,
 				0.0010000000474974513,
@@ -86,51 +86,51 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":37501,
+			"count":38903,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":37501,
+			"count":38903,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":111396,
+			"count":115584,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":450012,
+			"byteLength":466836,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":450012,
-			"byteOffset":450012,
+			"byteLength":466836,
+			"byteOffset":466836,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":300008,
-			"byteOffset":900024,
+			"byteLength":311224,
+			"byteOffset":933672,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":222792,
-			"byteOffset":1200032,
+			"byteLength":231168,
+			"byteOffset":1244896,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":1422824,
+			"byteLength":1476064,
 			"uri":"Becauseexpl.bin"
 		}
 	]
