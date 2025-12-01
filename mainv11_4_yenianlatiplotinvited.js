@@ -175,8 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 pointer-events: auto;
             `;
             content.innerHTML = `
-                <div style="font-size:18px; font-weight:700; margin-bottom:8px;">Move to the other sign</div>
-                <div style="font-size:15px;">Point your camera at the next sign to view the rest of the story.</div>
+                <div style="font-size:18px; font-weight:700; margin-bottom:8px;">Move to the other street sign</div>
+                <div style="font-size:15px;">Point your camera at the sign of the other street to view the rest of the story.</div>
             `;
             prompt.appendChild(content);
             document.body.appendChild(prompt);
@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             content.innerHTML = `
                 <div style="font-size:18px; font-weight:700; margin-bottom:8px;">Turn to your left</div>
-                <div style="font-size:18px; font-weight:700; margin-bottom:8px;">Stand on the ground arrow and aim your camera straight ahead.</div>
+                <div style="font-size:18px; font-weight:700; margin-bottom:8px;">Stand on the arrow on the ground and aim your camera straight ahead to the building across.</div>
             `;
             prompt.appendChild(content);
             document.body.appendChild(prompt);
