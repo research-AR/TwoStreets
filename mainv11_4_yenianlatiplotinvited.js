@@ -2390,16 +2390,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     "./assets/DataModel11_3/BinaKale/Bina3Ac6.gltf", 
                     "./assets/DataModel11_3/BinaKale/Bina3yuzde.gltf", 
 
+                    "./assets/DataModel11_3/BinaKale/Becauseexpl.gltf", 
 
                 ],
                 [0, 0, 0, 0, 1150, 1300, 1450, 1600, 1750, 1900, 2050, 
                     3500, 3500, 3500, 3650, 3800, 3950, 4100, 4250, 4400, 4550,
                     5000, 5000, 5000, 5150, 5300, 5450, 5600, 5750, 5900,
-
+                    6100,
                 ],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0,
                 ],
                 { resetOnLeave: true, resetOnEnter: true, exclusive: false }
             );
